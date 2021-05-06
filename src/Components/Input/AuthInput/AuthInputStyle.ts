@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../../Utils/colors";
 
-export const InputWrapper = styled.div`
+export const InputContainer = styled.div`
   display: flex;
   position: relative;
   margin-bottom: 15px;
@@ -26,7 +26,7 @@ export const Input = styled.input`
   }
 `;
 
-export const InputCont = styled.div`
+export const InputWrapper = styled.div`
   display: flex;
   width: 100%;
   flex: 0 0 100%;

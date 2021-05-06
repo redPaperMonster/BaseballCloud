@@ -2,21 +2,21 @@ import * as React from "react";
 import { Button } from "./SubmitButtonStyle";
 interface SubmitProps {
   title: string;
-  cancel?: boolean;
+  isCancelType?: boolean;
   onClick: () => void;
 }
 
 export type SubmitButtonStyleProps = {
-  cancel: boolean;
+  isCancelType: boolean;
 };
 
 const SubmitButton: React.FC<SubmitProps> = ({
   title,
-  cancel = false,
+  isCancelType = false,
   onClick,
 }) => {
   return (
-    <Button onClick={onClick} cancel={cancel}>
+    <Button onClick={onClick} isCancelType={isCancelType}>
       {title}
     </Button>
   );

@@ -1,21 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { LeaderBoard, UserProfile } from "../";
+import { LeaderBoard, UserProfile } from ".";
+import { UserPaths } from "../routes";
 
 interface UserRouteProps {}
 
 const UserRoute: React.FC<UserRouteProps> = ({}) => {
-  const token = localStorage.getItem("token");
-
   return (
     <Router>
       <Switch>
-        <Route exact path="/profile">
-          <UserProfile />
-        </Route>
-        <Route path="/leaderboard">
-          <LeaderBoard />
-        </Route>
+        <Route exact path={UserPaths.profile} component={UserProfile}></Route>
+        <Route path={UserPaths.leaderBoard} component={LeaderBoard}></Route>
       </Switch>
     </Router>
   );

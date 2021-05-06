@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import fetchAPI from "../../../APIService/fetchService";
-import { userActions, userSelector } from "../../../Store";
+import { userActions } from "../../../Store";
 import { Form, Field } from "react-final-form";
 import {
   ForgotPassLink,

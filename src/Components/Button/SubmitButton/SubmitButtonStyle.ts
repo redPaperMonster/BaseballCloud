@@ -4,11 +4,12 @@ import { SubmitButtonStyleProps } from "./SubmitButton";
 
 export const Button = styled.button<SubmitButtonStyleProps>`
   font-size: 16px;
-  color: ${(props) => (props.cancel ? colors.black : colors.white)};
+  color: ${(props) => (props.isCancelType ? colors.black : colors.white)};
   font-weight: 400;
-  border: solid 1px ${(props) => (props.cancel ? colors.gray : "transparent")};
+  border: solid 1px
+    ${(props) => (props.isCancelType ? colors.gray : "transparent")};
   background-color: ${(props) =>
-    props.cancel ? colors.white : colors.lightBlue};
+    props.isCancelType ? colors.white : colors.lightBlue};
   padding-top: 15px;
   padding-bottom: 15px;
   width: 100%;
@@ -19,6 +20,6 @@ export const Button = styled.button<SubmitButtonStyleProps>`
   &:hover {
     box-shadow: 0px 0px 4px red;
     box-shadow: 0 0 4px 0 ${colors.lightBlue};
-    ${(props) => (props.cancel ? "color:" + colors.lightBlue : "")}
+    ${(props) => (props.isCancelType ? "color:" + colors.lightBlue : "")}
   }
 `;

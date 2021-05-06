@@ -32,6 +32,7 @@ interface RegValues {
 export type SwitchRoleButtonStyleProps = {
   checked: boolean;
 };
+
 const Registration: React.FC<RegistrationProps> = ({}) => {
   enum roles {
     player = "player",
@@ -118,7 +119,7 @@ const Registration: React.FC<RegistrationProps> = ({}) => {
             <InfoWrapper>
               By clicking Sign Up, you agree to our{" "}
               <InfoLink href="/legal/terms">Terms of Service</InfoLink> and{" "}
-              <InfoLink href="/legal/privacy<!--">Privacy Policy</InfoLink> .
+              <InfoLink href="/legal/privacy">Privacy Policy</InfoLink> .
             </InfoWrapper>
             <SubmitButton onClick={handleSubmit} title="Sign Up" />
           </div>

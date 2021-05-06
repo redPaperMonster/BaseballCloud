@@ -1,7 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import * as React from "react";
-import { InputWrapper, IconWrapper, Input, InputCont } from "./AuthInputStyle";
+import {
+  InputWrapper,
+  IconWrapper,
+  Input,
+  InputContainer,
+} from "./AuthInputStyle";
 import { FieldRenderProps } from "react-final-form";
 interface AuthInputProps extends FieldRenderProps<string> {
   placeholder: string;
@@ -14,22 +19,22 @@ const AuthInput: React.FC<AuthInputProps> = ({
   icon,
   input,
   meta,
-  type,
+  type = "text",
 }) => {
   return (
-    <InputWrapper>
+    <InputContainer>
       <IconWrapper>
         <FontAwesomeIcon icon={icon} color="gray" />
       </IconWrapper>
-      <InputCont>
+      <InputWrapper>
         <Input
           placeholder={placeholder}
           onChange={input.onChange}
           value={input.value}
           type={type}
         />
-      </InputCont>
-    </InputWrapper>
+      </InputWrapper>
+    </InputContainer>
   );
 };
 export default AuthInput;

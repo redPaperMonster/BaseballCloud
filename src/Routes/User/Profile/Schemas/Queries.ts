@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export default {
+const queries = {
   currentProfile: gql`
     {
       current_profile {
@@ -35,3 +35,5 @@ export default {
     }
   `,
 };
+
+export default queries;
