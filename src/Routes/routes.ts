@@ -7,4 +7,5 @@ export enum AuthPaths {
 export enum UserPaths {
   profile = "/profile",
   leaderBoard = "/leaderboard",
+  network = "/network",
 }

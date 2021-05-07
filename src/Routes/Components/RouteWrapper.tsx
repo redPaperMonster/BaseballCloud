@@ -5,18 +5,21 @@ interface RouteWrapperProps {
   Component: React.FC<any>;
   Layout: React.FC<any>;
   path: string;
+  sidebarChildren?: React.FC<any>;
+  exact?: boolean;
 }
 const RouteWrapper: React.FC<RouteWrapperProps> = ({
   Component,
   Layout,
   path,
+  sidebarChildren,
 }) => {
   return (
     <Route
       path={path}
-      render={(props) => (
-        <Layout>
-          <Component {...props} />
+      render={() => (
+        <Layout SidebarChildren={sidebarChildren}>
+          <Component />
         </Layout>
       )}
     />
