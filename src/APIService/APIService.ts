@@ -7,13 +7,12 @@ export class APIService {
   static service = axios.create();
   static async get(url: string) {
     const responseData = this.service.get(url, config).catch((error: any) => {
-      console.log(`error!!!!!!!!`, error);
+      return error;
     });
     return responseData;
   }
   static async post(url: string, payload: any) {
     return await this.service.post(url, payload).catch((error) => {
-      console.log(`error??????`, error);
       return error;
     });
   }
@@ -29,7 +28,6 @@ export class APIService {
     };
 
     return await this.service.delete(url, config).catch((error) => {
-      console.log(`error`, error);
       return error;
     });
   }

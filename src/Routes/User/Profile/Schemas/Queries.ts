@@ -34,6 +34,15 @@ const queries = {
       }
     }
   `,
+  userData: gql`
+    {
+      current_profile {
+        first_name
+        last_name
+        avatar
+      }
+    }
+  `,
 };
 
 export default queries;

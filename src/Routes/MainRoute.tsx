@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { userSelector } from "../Store";
 import { AuthRoute, UserRoute } from "./";
 import { AuthPaths, UserPaths } from "./routes";
@@ -12,7 +12,7 @@ function MainRoute() {
     <div>
       <Route
         path="/"
-        render={() => {
+        render={(props) => {
           return token ? (
             <Redirect to={UserPaths.profile} />
           ) : (
