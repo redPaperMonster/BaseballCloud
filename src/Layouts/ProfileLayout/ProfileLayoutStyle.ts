@@ -45,8 +45,8 @@ export const Main = styled.div`
     "content content"
     "ft ft";
 `;
-export const Sidebar = styled.div`
-  background: #fff;
+export const SidebarWrapper = styled.div`
+  background: ${colors.white};
   border-right: 1px solid ${colors.gray};
   overflow: auto;
   padding: 16px;
@@ -62,5 +62,5 @@ export const Sidebar = styled.div`
 export const Content = styled.div`
   background: ${colors.secondaryText};
   overflow: auto;
-  width: calc(100vw - 220px);
+  width: 100%;
 `;

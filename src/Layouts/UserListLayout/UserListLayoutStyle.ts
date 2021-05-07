@@ -29,7 +29,6 @@ export const MainContent = styled.div`
   grid-area: content;
   background: ${colors.white};
   display: flex;
-  justify-content: space-between;
   overflow: hidden;
   height: 100%;
   box-sizing: inherit;
@@ -38,16 +37,13 @@ export const MainContent = styled.div`
 export const Main = styled.div`
   height: 100vh;
   display: grid;
+  background: ${colors.white};
+  overflow: auto;
+  width: 100%;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
     "hd hd"
     "content content"
     "ft ft";
-`;
-
-export const Content = styled.div`
-  background: ${colors.white};
-  overflow: auto;
-  width: 100%;
 `;

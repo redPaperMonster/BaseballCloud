@@ -29,7 +29,7 @@ const UserRoute: React.FC<UserRouteProps> = ({}) => {
           path={UserPaths.profile}
           Component={UserProfile}
           Layout={ProfileLayout}
-          sidebarChildren={Sidebar}
+          Sidebar={Sidebar}
         />
         <RouteWrapper
           path={UserPaths.leaderBoard}

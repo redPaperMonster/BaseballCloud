@@ -1,18 +1,25 @@
 import React from "react";
 import { Footer, Header } from "../Components";
-import { Content, Main, MainContent, Sidebar } from "./ProfileLayoutStyle";
+import {
+  Content,
+  Main,
+  MainContent,
+  SidebarWrapper,
+} from "./ProfileLayoutStyle";
 interface ProfileLayoutProps {
-  SidebarChildren: React.FC<any>;
+  Sidebar: React.FC<any>;
 }
-const ProfileLayout: React.FC<ProfileLayoutProps> = ({
-  children,
-  SidebarChildren,
-}) => {
+const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, Sidebar }) => {
   return (
     <Main>
       <Header isAuthorized />
       <MainContent>
-        <Sidebar>{SidebarChildren && <SidebarChildren />}</Sidebar>
+        {Sidebar && (
+          <SidebarWrapper>
+            <Sidebar />
+          </SidebarWrapper>
+        )}
+
         <Content>{children}</Content>
       </MainContent>
       <Footer />
