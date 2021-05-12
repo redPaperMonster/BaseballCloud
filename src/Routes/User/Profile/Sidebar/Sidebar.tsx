@@ -1,13 +1,10 @@
 import React from "react";
+import SidebarInfo from "./SidebarInfo/SidebarInfo";
 
 interface SidebarProps {}
 
 const Sidebar: React.FC<SidebarProps> = ({}) => {
-  return (
-    <div>
-      <h1>SOME SIDEBAR CONTENT!</h1>
-    </div>
-  );
+  return <SidebarInfo />;
 };
 
 export default Sidebar;

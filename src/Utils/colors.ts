@@ -1,6 +1,7 @@
 export enum colors {
   lightBlue = "#48bbff",
   white = "#ffffff",
+  lightBlack = "#414f5a",
   black = "#000",
   yellow = "#ffd01a",
   lightGray = "#eff1f3",
@@ -10,4 +11,5 @@ export enum colors {
   blue = "#337ab7",
   darkBlue = "#23527c",
   green = "#35c32a",
+  softLightBlue = "rgba(72, 187, 255, 0.1)",
 }

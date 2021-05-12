@@ -13,23 +13,31 @@ import Sidebar from "./Profile/Sidebar/Sidebar";
 interface UserRouteProps {}
 
 const UserRoute: React.FC<UserRouteProps> = ({}) => {
-  const { loading, error, data } = useQuery(queries.userData);
+  const { loading, error, data } = useQuery(queries.currentProfile);
 
   const dispatch = useDispatch();
 
   if (loading) {
     return <h1>LOADING....</h1>;
   }
-  dispatch(userActions.setData(data.current_profile));
+  console.log(`here`);
 
+  dispatch(userActions.setData(data.current_profile));
   return (
     <Router>
       <Switch>
-        <RouteWrapper
-          path={UserPaths.profile}
+        {/* <RouteWrapper
+          exact
+          path="/"
           Component={UserProfile}
           Layout={ProfileLayout}
           Sidebar={Sidebar}
+        /> */}
+        <RouteWrapper
+          path={UserPaths.profile}
+          Component={UserProfile}
+          Layout={ProfileLayout} //layout type
+          Sidebar={Sidebar} //TODO: type sidebar layout
         />
         <RouteWrapper
           path={UserPaths.leaderBoard}

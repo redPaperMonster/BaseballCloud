@@ -51,10 +51,10 @@ const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
           </NavWrapper>
           <NavMenu>
             <Link to={UserPaths.profile}>
-              <UserImage url={userData.avatarURL} />
+              <UserImage url={userData.avatar} />
             </Link>
             <DropdownMenu
-              userName={`${userData.firstName} ${userData.lastName}`}
+              userName={`${userData.first_name} ${userData.last_name}`}
             />
           </NavMenu>
         </NavContainer>

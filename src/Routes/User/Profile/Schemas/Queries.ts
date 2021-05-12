@@ -40,6 +40,8 @@ const queries = {
         first_name
         last_name
         avatar
+        position
+        position2
       }
     }
   `,

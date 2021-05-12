@@ -16,6 +16,7 @@ const AuthRoute: React.FC<AuthRouteProps> = ({}) => {
           Component={Login}
           Layout={AuthLayout}
         />
+        {/* <RouteWrapper path="/" Component={Login} Layout={AuthLayout} /> */}
         <RouteWrapper
           path={AuthPaths.registration}
           Component={Registration}

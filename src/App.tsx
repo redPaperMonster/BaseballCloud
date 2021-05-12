@@ -8,10 +8,11 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { MainRoute } from "./Routes";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./Store/store";
 import { BrowserRouter as Router } from "react-router-dom";
+import { userSelector } from "./Store";
 
 const httpLink = createHttpLink({
   uri: `https://baseballcloud-back.herokuapp.com/api/v1/graphql`,

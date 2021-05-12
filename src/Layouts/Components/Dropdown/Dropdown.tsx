@@ -14,6 +14,7 @@ import {
   IconWrapper,
 } from "./DropdownStyle";
 import useComponentOpened from "./useComponentOpened";
+import { gql, useQuery } from "@apollo/client";
 
 export interface DropdownStyleProps {
   isOpened: boolean;
@@ -21,14 +22,29 @@ export interface DropdownStyleProps {
 interface DropdownProps {
   userName: string;
 }
+// TODO: ???????
+const currentProfile = gql`
+  {
+    current_profile {
+      first_name
+      last_name
+      avatar
+      position
+      position2
+    }
+  }
+`;
 const DropdownMenu: React.FC<DropdownProps> = ({ userName }) => {
   const dispatch = useDispatch();
   const { ref, isOpened, setIsOpened } = useComponentOpened(false);
-
+  const { client, loading, data } = useQuery(currentProfile, {
+    fetchPolicy: "network-only",
+  });
   const handleLogOut = async () => {
     await fetchAPI.logOut().then(() => {
       localStorage.clear();
-      dispatch(userActions.setToken(""));
+      //dispatch(userActions.setToken(""));
+      //client.resetStore();
       dispatch(userActions.resetStore());
     });
   };
