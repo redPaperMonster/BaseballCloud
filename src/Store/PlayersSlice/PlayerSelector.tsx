@@ -3,8 +3,10 @@ import { RootState } from "../store";
 
 const store = (state: RootState) => state;
 
-export const userSelector = {
+export const playerSelector = {
   getToken: () => createSelector(store, (state) => state.user.token),
-  getUserData: () => createSelector(store, (state) => state.user),
-  getUserId: () => createSelector(store, (state) => state.user.id),
+  getPlayerById: (id: string) =>
+    createSelector(store, (state) =>
+      state.players.filter((i: any) => i.id === id)
+    ),
 };

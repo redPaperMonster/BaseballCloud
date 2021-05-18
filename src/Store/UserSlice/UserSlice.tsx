@@ -1,11 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { mapValues } from "lodash";
+import { transformData } from "../../Utils";
 
 const initialState = {
   token: "",
-  avatarURL: "",
-  firstName: "",
-  lastName: "",
+  id: "",
+  first_name: "",
+  last_name: "",
+  avatar: "",
+  position: "",
+  position2: "",
+  throws_hand: "",
+  bats_hand: "",
+  biography: "",
+  school_year: "",
+  feet: 0,
+  inches: 0,
+  weight: 0,
+  age: 0,
+  school: { id: "", name: "" },
+  teams: [],
+  facilities: [],
 };
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -14,14 +31,12 @@ export const userSlice = createSlice({
       state.token = action.payload;
     },
     setData: (state, action) => {
-      state.avatarURL = action.payload.avatar;
-      state.firstName = action.payload.first_name;
-      state.lastName = action.payload.last_name;
+      const newState = transformData(action.payload);
+      state = { ...state, ...newState };
+      return state;
     },
     resetStore: (state) => {
-      state.avatarURL = "";
-      state.firstName = "";
-      state.lastName = "";
+      state = initialState;
       return state;
     },
   },
