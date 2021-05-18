@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ArrowIcon } from "../../../Assets/icons";
-import { AuthPaths, UserPaths } from "../../../Routes/routes";
-import { AxiosResponse } from "axios";
+import { UserPaths } from "../../../Routes/routes";
 import { fetchAPI } from "../../../APIService";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../../Store";
@@ -21,6 +20,7 @@ export interface DropdownStyleProps {
 interface DropdownProps {
   userName: string;
 }
+
 const DropdownMenu: React.FC<DropdownProps> = ({ userName }) => {
   const dispatch = useDispatch();
   const { ref, isOpened, setIsOpened } = useComponentOpened(false);
@@ -28,7 +28,6 @@ const DropdownMenu: React.FC<DropdownProps> = ({ userName }) => {
   const handleLogOut = async () => {
     await fetchAPI.logOut().then(() => {
       localStorage.clear();
-      dispatch(userActions.setToken(""));
       dispatch(userActions.resetStore());
     });
   };

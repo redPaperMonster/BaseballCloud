@@ -1,4 +1,5 @@
 import React from "react";
+import Sidebar from "../../Routes/User/Profile/Sidebar/Sidebar";
 import { Footer, Header } from "../Components";
 import {
   Content,
@@ -6,19 +7,19 @@ import {
   MainContent,
   SidebarWrapper,
 } from "./ProfileLayoutStyle";
+
 interface ProfileLayoutProps {
-  Sidebar: React.FC<any>;
+  isSidebarEdited?: boolean;
+  params?: any;
 }
-const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, Sidebar }) => {
+const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, params }) => {
   return (
     <Main>
       <Header isAuthorized />
       <MainContent>
-        {Sidebar && (
-          <SidebarWrapper>
-            <Sidebar />
-          </SidebarWrapper>
-        )}
+        <SidebarWrapper>
+          <Sidebar params={params} />
+        </SidebarWrapper>
 
         <Content>{children}</Content>
       </MainContent>

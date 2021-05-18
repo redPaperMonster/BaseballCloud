@@ -1,12 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { userSelector } from "../Store";
 import { AuthRoute, UserRoute } from "./";
 import { AuthPaths, UserPaths } from "./routes";
 
 function MainRoute() {
   const token = useSelector(userSelector.getToken());
+  const auth = (Component?: any) => {
+    if (!Component) {
+      return <Redirect to={token ? UserPaths.profile : AuthPaths.login} />;
+    }
+    return <Component />;
+  };
 
   return (
     <div>
@@ -20,8 +26,9 @@ function MainRoute() {
           );
         }}
       />
-      <Route path={AuthPaths.login} component={AuthRoute} />
+
       <Route path={UserPaths.profile} component={UserRoute} />
+      <Route path={AuthPaths.login} component={AuthRoute} />
     </div>
   );
 }

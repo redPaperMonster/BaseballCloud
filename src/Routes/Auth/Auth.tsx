@@ -1,8 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
-import { Registration, ForgotPassword, Login } from ".";
-import { AuthLayout } from "../../Layouts";
-import RouteWrapper from "../Components/RouteWrapper";
+import RouteWrapper, { LayoutType } from "../Components/RouteWrapper";
 import { AuthPaths } from "../routes";
 
 interface AuthRouteProps {}
@@ -11,20 +9,14 @@ const AuthRoute: React.FC<AuthRouteProps> = ({}) => {
   return (
     <Router>
       <Switch>
-        <RouteWrapper
-          path={AuthPaths.login}
-          Component={Login}
-          Layout={AuthLayout}
-        />
+        <RouteWrapper path={AuthPaths.login} layoutType={LayoutType.login} />
         <RouteWrapper
           path={AuthPaths.registration}
-          Component={Registration}
-          Layout={AuthLayout}
+          layoutType={LayoutType.singUp}
         />
         <RouteWrapper
           path={AuthPaths.forgotPassword}
-          Component={ForgotPassword}
-          Layout={AuthLayout}
+          layoutType={LayoutType.forgotPassword}
         />
       </Switch>
     </Router>
