@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FavoriteButton } from "../../../../../Components";
 import { UserPaths } from "../../../../routes";
 import {
   RowContainer,
@@ -36,7 +37,9 @@ const NetworkTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
       </TableCell>
 
       <TableNetworkCell width="5">{playerData.age}</TableNetworkCell>
-      <TableCell width="5">{playerData.favorite}</TableCell>
+      <TableCell width="5">
+        <FavoriteButton isFavorite={playerData.favorite} id={playerData.id} />
+      </TableCell>
     </RowContainer>
   );
 };

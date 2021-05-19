@@ -41,7 +41,6 @@ export const RowContainer = styled.div`
   background-color: #f7f8f9;
 `;
 export const TableCell = styled.div<TableRowStyleProps>`
-  padding-left: 6px;
   width: ${(props) => props.width}%;
   flex: 1 0 ${(props) => props.width}%;
   min-width: 0;
@@ -49,7 +48,6 @@ export const TableCell = styled.div<TableRowStyleProps>`
   color: ${colors.lightBlack};
 `;
 export const TableCellLink = styled(Link)<TableRowStyleProps>`
-  padding-left: 6px;
   width: ${(props) => props.width}%;
   flex: 1 0 ${(props) => props.width}%;
   min-width: 0;

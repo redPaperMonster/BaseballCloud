@@ -1,12 +1,15 @@
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FilterSelect, FindInput } from "../../../Components";
+import { playerSelector } from "../../../Store";
 import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
+import { transformData } from "../../../Utils";
 import TableHeader from "./Components/Table/TableHeader";
 import TableRow from "./Components/Table/TableRow";
 import {
+  NetworkContainer,
   NetworkFiltersWrapper,
   NetworkHeader,
   NetworkTitle,
@@ -30,6 +33,8 @@ function Network() {
     { value: 25, label: "25" },
     { value: 50, label: "50" },
   ];
+  const [playerData, setPlayerData] = useState<any>();
+
   const { loading, error, data } = useQuery(queries.userList, {
     variables: { input: { offset: offset, profiles_count: perPage } },
   });
@@ -37,20 +42,28 @@ function Network() {
   const handleSetOption = (e: any) => {
     setPerPage(e.value);
   };
-
+  const players = useSelector(
+    playerSelector.getPlayersByOffset(offset, perPage)
+  );
   useEffect(() => {
-    !loading &&
-      dispatch(playerActions.setData(data.profiles.profiles)) &&
+    if (!loading) {
+      dispatch(playerActions.setData(data.profiles.profiles));
       setPagesCount(data.profiles.total_count / perPage);
+
+      if (data) {
+        setPlayerData(data.profiles.profiles);
+      }
+      if (players.length !== 0) {
+        setPlayerData(players);
+      }
+    }
   }, [data]);
 
+  if (!playerData) return null;
+
   return (
-    <NetworkWrapper>
-      <div
-        style={{
-          padding: "16px",
-        }}
-      >
+    <NetworkContainer>
+      <NetworkWrapper>
         <NetworkHeader>
           <NetworkTitle>Network</NetworkTitle>
           <NetworkFiltersWrapper>
@@ -76,7 +89,7 @@ function Network() {
           <h1>LOADING....</h1>
         ) : (
           <TableContainer>
-            {data.profiles.profiles.map((i: any) => {
+            {playerData.map((i: any) => {
               return <TableRow playerData={i} key={i.id} />;
             })}
           </TableContainer>
@@ -94,8 +107,8 @@ function Network() {
           containerClassName={"pagination"}
           activeClassName={"active"}
         />
-      </div>
-    </NetworkWrapper>
+      </NetworkWrapper>
+    </NetworkContainer>
   );
 }
 

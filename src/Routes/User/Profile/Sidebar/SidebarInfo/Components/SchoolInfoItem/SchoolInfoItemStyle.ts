@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../../../../../Utils/colors";
+import { colors } from "../../../../../../../Utils";
 
 export const ItemContainer = styled.div`
   display: flex;

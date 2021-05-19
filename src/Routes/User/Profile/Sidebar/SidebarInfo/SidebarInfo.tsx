@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AgeIcon,
   BatsIcon,
@@ -9,7 +9,7 @@ import {
   WeightIcon,
 } from "../../../../../Assets/icons";
 import { playerSelector, userSelector } from "../../../../../Store";
-import PersonalInfoItem from "./PersonalInfoItem/PersonalInfoItem";
+import PersonalInfoItem from "./Components/PersonalInfoItem/PersonalInfoItem";
 import { transformData } from "../../../../../Utils";
 import {
   EditButton,
@@ -27,7 +27,10 @@ import {
   FormTitle,
   BioText,
 } from "./SidebarInfoStyle";
-import SchoolInfoItem from "./SchoolInfoItem/SchoolInfoItem";
+import SchoolInfoItem from "./Components/SchoolInfoItem/SchoolInfoItem";
+import SidebarFavoriteButton from "./Components/SidebarFavoriteButton/SidebarFavoriteButton";
+import { useQuery } from "@apollo/client";
+import { queries } from "../../Schemas";
 
 interface SidebarInfoProps {
   setFormShow?: () => void;
@@ -42,17 +45,35 @@ export interface SidebarInfoStyleProps {
 const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
   let user: any = useSelector(userSelector.getUserData());
   let player: any = useSelector(playerSelector.getPlayerById(params.id));
-  const [userData, setUserData] = useState(user);
+  const { loading, data }: any = useQuery(queries.getPlayerProfile, {
+    variables: { id: (params && params.id) || user.id },
+  });
+  const [playerData, setPlayerData] = useState<any>();
   useEffect(() => {
-    player[0] && params.id && setUserData(transformData(player[0]));
-  }, []);
+    if (!loading) {
+      if (player) {
+        setPlayerData(transformData(player));
+      } else if (params.id && data) {
+        setPlayerData(data.profile);
+      } else {
+        setPlayerData(user);
+      }
+    }
+  });
+  if (!playerData) return null;
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div>
       <UserInfoContainer>
         <EditButtonWrapper>
           {params && params.id ? (
-            <div>LIKE!</div>
+            <SidebarFavoriteButton
+              isFavorite={playerData.favorite}
+              id={playerData.id}
+            />
           ) : (
             <EditButton onClick={setFormShow}>
               <EditIcon />
@@ -60,74 +81,78 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
           )}
         </EditButtonWrapper>
         <ImageWrapper>
-          <UserImage url={userData.avatar} />
+          <UserImage url={playerData.avatar} />
         </ImageWrapper>
         <UserInfoWrapper>
-          <UserName>{`${userData.first_name} ${userData.last_name}`}</UserName>
-          <FirstPosition>{userData.position}</FirstPosition>
-          <SecondPosition>{userData.position2}</SecondPosition>
+          <UserName>{`${playerData.first_name} ${playerData.last_name}`}</UserName>
+          <FirstPosition>{playerData.position}</FirstPosition>
+          <SecondPosition>{playerData.position2}</SecondPosition>
         </UserInfoWrapper>
       </UserInfoContainer>
       <PersonalInfo>
-        <PersonalInfoItem icon={<AgeIcon />} text="Age" value={userData.age} />
+        <PersonalInfoItem
+          icon={<AgeIcon />}
+          text="Age"
+          value={playerData.age}
+        />
         <PersonalInfoItem
           icon={<HeightIcon />}
           text="Height"
-          value={`${userData.feet} ft ${userData.inches} in`}
+          value={`${playerData.feet} ft ${playerData.inches} in`}
         />
         <PersonalInfoItem
           icon={<WeightIcon />}
           text="Weight"
-          value={userData.weight}
+          value={playerData.weight}
         />
         <PersonalInfoItem
           icon={<ThrowIcon />}
           text="Throws"
-          value={userData.throws_hand}
+          value={playerData.throws_hand}
         />
         <PersonalInfoItem
           icon={<BatsIcon />}
           text="Bats"
-          value={userData.bats_hand}
+          value={playerData.bats_hand}
         />
       </PersonalInfo>
       <SchoolInfo>
-        {userData.school && userData.school.name && (
-          <SchoolInfoItem title="School" text={userData.school.name} />
+        {playerData.school && playerData.school.name && (
+          <SchoolInfoItem title="School" text={playerData.school.name} />
         )}
-        {userData.school_year && (
-          <SchoolInfoItem title="School year" text={userData.school_year} />
+        {playerData.school_year && (
+          <SchoolInfoItem title="School year" text={playerData.school_year} />
         )}
-        {userData.teams && userData.teams.length !== 0 && (
+        {playerData.teams && playerData.teams.length !== 0 && (
           <SchoolInfoItem
             title="Team"
-            text={userData.teams.map((i: any) => {
+            text={playerData.teams.map((i: any) => {
               return (
                 i.name &&
-                (i === userData.teams.slice(-1)[0] ? i.name : `${i.name}, `)
+                (i === playerData.teams.slice(-1)[0] ? i.name : `${i.name}, `)
               );
             })}
           />
         )}
-        {userData.facilities && userData.facilities.length !== 0 && (
+        {playerData.facilities && playerData.facilities.length !== 0 && (
           <SchoolInfoItem
             title="Facility"
-            text={userData.facilities.map((i: any) => {
+            text={playerData.facilities.map((i: any) => {
               return (
                 i.u_name &&
-                (i === userData.facilities.slice(-1)[0]
+                (i === playerData.facilities.slice(-1)[0]
                   ? i.u_name
                   : `${i.u_name}, `)
               );
             })}
           />
         )}
-        {userData.biography && (
+        {playerData.biography && (
           <div>
             <TitleWrapper>
               <FormTitle>About</FormTitle>
             </TitleWrapper>
-            <BioText>{userData.biography}</BioText>
+            <BioText>{playerData.biography}</BioText>
           </div>
         )}
       </SchoolInfo>

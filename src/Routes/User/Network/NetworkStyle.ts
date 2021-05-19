@@ -6,6 +6,9 @@ export const TableContainer = styled.div`
   flex-direction: column;
 `;
 export const NetworkWrapper = styled.div`
+  padding: 16px;
+`;
+export const NetworkContainer = styled.div`
   padding: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;

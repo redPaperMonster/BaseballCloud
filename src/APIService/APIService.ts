@@ -6,8 +6,8 @@ const config = {
 export class APIService {
   static service = axios.create();
 
-  static async get(url: string) {
-    const responseData = this.service.get(url).catch((error: any) => {
+  static async get(url: string, configs: any = config) {
+    const responseData = this.service.get(url, configs).catch((error: any) => {
       return error;
     });
     return responseData;

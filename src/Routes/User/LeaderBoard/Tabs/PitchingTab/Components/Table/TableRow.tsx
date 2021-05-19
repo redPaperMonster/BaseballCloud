@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FavoriteButton } from "../../../../../../../Components";
 import { UserPaths } from "../../../../../../routes";
 import {
   RowContainer,
@@ -40,7 +41,12 @@ const PitchingTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
       <TableCell width="10">{playerData.pitch_type}</TableCell>
       <TableCell width="10">{playerData.velocity}</TableCell>
       <TableCell width="10">{playerData.spin_rate}</TableCell>
-      <TableCell width="5">{playerData.favorite}</TableCell>
+      <TableCell width="5">
+        <FavoriteButton
+          isFavorite={playerData.favorite}
+          id={playerData.pitcher_datraks_id}
+        />
+      </TableCell>
     </RowContainer>
   );
 };

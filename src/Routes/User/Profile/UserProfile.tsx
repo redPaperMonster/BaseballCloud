@@ -1,8 +1,9 @@
 import { useQuery } from "@apollo/client";
 import _ from "lodash";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../Store";
+import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
 import ProgressItem from "./Components/ProgressItem/ProgressItem";
 import { queries } from "./Schemas";
 import ProfileTabs from "./Tabs/ProfileTabs";
@@ -21,12 +22,14 @@ interface UserProfileProps {
 }
 const UserProfile: React.FC<UserProfileProps> = ({ params }) => {
   let userId = useSelector(userSelector.getUserId());
-  const { loading, error, data } = useQuery(queries.getBattingSummary, {
+  const { loading, data } = useQuery(queries.getBattingSummary, {
     variables: { id: (params && params.id) || userId },
   });
+
   if (loading) {
     return <h1>Loading...</h1>;
   }
+
   const topValues = data.batting_summary.top_values[0];
 
   return (

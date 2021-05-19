@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { transformData } from "../../Utils";
 
-const initialState = [{}];
+const initialState: any[] = [];
 
 export const playerSlice = createSlice({
   name: "player",
@@ -9,9 +9,24 @@ export const playerSlice = createSlice({
   reducers: {
     setData: (state, action) => {
       action.payload.map((i: any) => {
-        state.push(i);
+        if (!state.find((item) => item.id === i.id)) {
+          state.push(i);
+        }
       });
       transformData(state);
+      return state;
+    },
+    addPlayer: (state, action) => {
+      state.push(action.payload);
+      return state;
+    },
+    updateFavorite: (state, action) => {
+      state.map((i: any) => {
+        if (i.id === action.payload.id) {
+          i.favorite = action.payload.favorite;
+        }
+        return i;
+      });
       return state;
     },
     resetStore: (state) => {

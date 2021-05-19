@@ -6,10 +6,17 @@ import { queries } from "./Profile/Schemas";
 import { useQuery } from "@apollo/client";
 import { userActions } from "../../Store";
 import { useDispatch } from "react-redux";
+import { fetchAPI } from "../../APIService";
 
 interface UserRouteProps {}
 
 const UserRoute: React.FC<UserRouteProps> = ({}) => {
+  const validateToken = async () => {
+    await fetchAPI.validateToken();
+  };
+  useEffect(() => {
+    validateToken().then((res) => console.log(`res`, res));
+  }, []);
   const { loading, error, data } = useQuery(queries.getCurrentProfile);
 
   const dispatch = useDispatch();

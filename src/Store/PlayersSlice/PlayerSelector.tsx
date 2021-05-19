@@ -4,9 +4,15 @@ import { RootState } from "../store";
 const store = (state: RootState) => state;
 
 export const playerSelector = {
-  getToken: () => createSelector(store, (state) => state.user.token),
+  getPlayersByOffset: (offset: number, perPage: number) =>
+    createSelector(store, (state) => {
+      let newState = [...state.players];
+      newState = newState.slice(offset, newState.length);
+      newState = newState.slice(0, perPage);
+      return newState;
+    }),
   getPlayerById: (id: string) =>
     createSelector(store, (state) =>
-      state.players.filter((i: any) => i.id === id)
+      state.players.find((i: any) => i.id === id)
     ),
 };

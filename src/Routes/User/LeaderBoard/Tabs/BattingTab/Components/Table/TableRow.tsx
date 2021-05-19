@@ -1,11 +1,11 @@
 import * as React from "react";
+import { FavoriteButton } from "../../../../../../../Components";
 import { UserPaths } from "../../../../../../routes";
 import {
   RowContainer,
   TableCell,
   TableCellLink,
   TableNetworkCell,
-  TableNetworkCellLink,
 } from "./TableStyle";
 export interface TableRowStyleProps {
   width: string;
@@ -20,12 +20,12 @@ const BattingTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
     <RowContainer>
       <TableNetworkCell width="6">{rank}</TableNetworkCell>
       <TableCellLink
-        width="14"
+        width="13"
         to={`${UserPaths.profile}/${playerData.batter_datraks_id}`}
       >
         {playerData.batter_name}
       </TableCellLink>
-      <TableCell width="5">{playerData.age}</TableCell>
+      <TableCell width="4">{playerData.age}</TableCell>
       <TableNetworkCell width="10">
         {(playerData.school && playerData.school.name) || "-"}
       </TableNetworkCell>
@@ -43,7 +43,12 @@ const BattingTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
       <TableCell width="10">{playerData.launch_angle}</TableCell>
 
       <TableCell width="10">{playerData.distance}</TableCell>
-      <TableCell width="5">{playerData.favorite}</TableCell>
+      <TableCell width="5">
+        <FavoriteButton
+          isFavorite={playerData.favorite}
+          id={playerData.batter_datraks_id}
+        />
+      </TableCell>
     </RowContainer>
   );
 };

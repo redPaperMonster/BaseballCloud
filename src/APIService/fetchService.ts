@@ -16,7 +16,18 @@ const fetchService = {
   },
 
   validateToken: () => {
-    return APIService.get(`${API_URL}/validate_token`);
+    const token = localStorage.getItem("token");
+    const client = localStorage.getItem("client");
+    const uid = localStorage.getItem("uid");
+    const config = {
+      headers: {
+        "access-token": token || "",
+        client: client || "",
+        uid: uid || "",
+      },
+    };
+
+    return APIService.get(`${API_URL}/validate_token`, config);
   },
 
   signUp: async (payload: SignUpPayload) => {
@@ -38,13 +49,12 @@ const fetchService = {
   },
   // TODO: avatar!
   uploadPhoto: async (payload: any, name: any) => {
-    const token = localStorage.getItem("token");
-    const client = localStorage.getItem("client");
-    const uid = localStorage.getItem("uid");
     const config = {
       headers: {},
     };
-
+    const token = localStorage.getItem("token");
+    const client = localStorage.getItem("client");
+    const uid = localStorage.getItem("uid");
     config.headers = {
       ...config.headers,
       "access-token": token || "",
