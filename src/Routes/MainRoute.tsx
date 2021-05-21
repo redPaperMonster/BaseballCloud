@@ -1,34 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
-import { userSelector } from "../Store";
+import { Route } from "react-router-dom";
 import { AuthRoute, UserRoute } from "./";
+import authGuard from "./Components/AuthGuard";
 import { AuthPaths, UserPaths } from "./routes";
 
 function MainRoute() {
-  const token = useSelector(userSelector.getToken());
-  const auth = (Component?: any) => {
-    if (!Component) {
-      return <Redirect to={token ? UserPaths.profile : AuthPaths.login} />;
-    }
-    return <Component />;
-  };
-
   return (
     <div>
-      <Route
-        path="/"
-        render={(props) => {
-          return token ? (
-            <Redirect to={UserPaths.profile} />
-          ) : (
-            <Redirect to={AuthPaths.login} />
-          );
-        }}
-      />
-
-      <Route path={UserPaths.profile} component={UserRoute} />
-      <Route path={AuthPaths.login} component={AuthRoute} />
+      <Route path="/" component={authGuard()} />
+      <Route path={UserPaths.profile} component={authGuard(UserRoute)} />
+      <Route path={AuthPaths.login} component={authGuard(AuthRoute)} />
     </div>
   );
 }

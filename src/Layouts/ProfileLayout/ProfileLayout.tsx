@@ -9,16 +9,16 @@ import {
 } from "./ProfileLayoutStyle";
 
 interface ProfileLayoutProps {
-  isSidebarEdited?: boolean;
-  params?: any;
+  match?: any;
 }
-const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, params }) => {
+const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, match }) => {
+  console.log(`profile layout`);
   return (
     <Main>
       <Header isAuthorized />
       <MainContent>
         <SidebarWrapper>
-          <Sidebar params={params} />
+          <Sidebar params={match.params} />
         </SidebarWrapper>
 
         <Content>{children}</Content>

@@ -21,6 +21,7 @@ function LogTab() {
       <LogHeader>
         <FindInput placeholder="Search" />
         <FilterSelect
+          width="120"
           options={logOptions}
           onInputChange={() => {}}
           placeholder="Pitch Type"

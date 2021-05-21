@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { FilterSelect, FindInput } from "../../../Components";
 import { playerSelector } from "../../../Store";
 import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
-import { transformData } from "../../../Utils";
 import TableHeader from "./Components/Table/TableHeader";
 import TableRow from "./Components/Table/TableRow";
 import {
@@ -72,6 +71,7 @@ function Network() {
               onInputChange={handleSetOption}
               placeholder={`Show ${perPage}`}
               isShouldRenderValue={false}
+              width="110"
             />
           </NetworkFiltersWrapper>
         </NetworkHeader>

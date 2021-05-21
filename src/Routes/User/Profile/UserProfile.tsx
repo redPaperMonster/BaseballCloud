@@ -22,6 +22,7 @@ interface UserProfileProps {
 }
 const UserProfile: React.FC<UserProfileProps> = ({ params }) => {
   let userId = useSelector(userSelector.getUserId());
+
   const { loading, data } = useQuery(queries.getBattingSummary, {
     variables: { id: (params && params.id) || userId },
   });
@@ -29,11 +30,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ params }) => {
   if (loading) {
     return <h1>Loading...</h1>;
   }
-
   const topValues = data.batting_summary.top_values[0];
 
   return (
     <div>
+      <h1>HERE</h1>
       <SummaryEventsWrapper>
         <PitcherSummarySection>
           <CardTitleWrapper>

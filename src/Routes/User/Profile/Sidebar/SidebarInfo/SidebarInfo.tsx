@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   AgeIcon,
   BatsIcon,
@@ -59,12 +59,11 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
         setPlayerData(user);
       }
     }
-  });
-  if (!playerData) return null;
+  }, [data, player]);
   if (loading) {
     return <h1>Loading...</h1>;
   }
-
+  if (!playerData) return null;
   return (
     <div>
       <UserInfoContainer>

@@ -7,6 +7,9 @@ import { useQuery } from "@apollo/client";
 import { userActions } from "../../Store";
 import { useDispatch } from "react-redux";
 import { fetchAPI } from "../../APIService";
+import { ProfileLayout, UserListLayout } from "../../Layouts";
+import UserProfile from "./Profile/UserProfile";
+import { LeaderBoard, Network } from ".";
 
 interface UserRouteProps {}
 
@@ -29,18 +32,27 @@ const UserRoute: React.FC<UserRouteProps> = ({}) => {
   return (
     <Router>
       <RouteWrapper
+        exact
         path={UserPaths.profile}
-        layoutType={LayoutType.userProfile}
-      />
-      <RouteWrapper
-        path={UserPaths.playerProfile}
-        layoutType={LayoutType.playerProfile}
+        Layout={ProfileLayout}
+        Component={UserProfile}
       />
       <RouteWrapper
         path={UserPaths.leaderBoard}
-        layoutType={LayoutType.leaderBoard}
+        Layout={UserListLayout}
+        Component={LeaderBoard}
       />
-      <RouteWrapper path={UserPaths.network} layoutType={LayoutType.network} />
+      <RouteWrapper
+        path={UserPaths.network}
+        Layout={UserListLayout}
+        Component={Network}
+      />
+      <RouteWrapper
+        exact
+        path={UserPaths.playerProfile}
+        Layout={ProfileLayout}
+        Component={UserProfile}
+      />
     </Router>
   );
 };
