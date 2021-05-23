@@ -24,7 +24,6 @@ const SidebarFavoriteButton: React.FC<FavoriteProps> = ({ isFavorite, id }) => {
     updateFavorite({
       variables: { form: { favorite: !isFavorite, profile_id: id } },
     }).then((data) => {
-      console.log(`data`, data);
       dispatch(
         playerActions.updateFavorite({
           id,

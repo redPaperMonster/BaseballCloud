@@ -34,7 +34,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ params }) => {
 
   return (
     <div>
-      <h1>HERE</h1>
       <SummaryEventsWrapper>
         <PitcherSummarySection>
           <CardTitleWrapper>

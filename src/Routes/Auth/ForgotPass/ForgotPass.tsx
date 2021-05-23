@@ -10,6 +10,7 @@ import {
 import { Form, Field } from "react-final-form";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import fetchAPI from "../../../APIService/fetchService";
+import { validation } from "../../../Utils";
 
 interface ForgotPasswordProps {}
 interface ForgotPasswordValues {
@@ -31,7 +32,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({}) => {
       <Form onSubmit={handleSubmit}>
         {({ handleSubmit }) => (
           <div>
-            <Field name="email">
+            <Field name="email" validate={validation.emailValidate}>
               {(props) => (
                 <AuthInput placeholder="Email" icon={faUser} {...props} />
               )}

@@ -59,7 +59,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
         setPlayerData(user);
       }
     }
-  }, [data, player]);
+  }, [data, player, user]);
   if (loading) {
     return <h1>Loading...</h1>;
   }

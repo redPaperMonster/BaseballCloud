@@ -27,7 +27,6 @@ export type HeaderLinkStyleProps = {
 const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
   const userData = useSelector(userSelector.getUserData());
   const { pathname } = useLocation();
-
   return (
     <HeaderContainer>
       <Link to={isAuthorized ? UserPaths.profile : AuthPaths.login}>
@@ -54,7 +53,9 @@ const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
               <UserImage url={userData.avatar} />
             </Link>
             <DropdownMenu
-              userName={`${userData.first_name} ${userData.last_name}`}
+              userName={`${userData.first_name || "Profile"} ${
+                userData.last_name || "Name"
+              }`}
             />
           </NavMenu>
         </NavContainer>

@@ -1,18 +1,23 @@
 import { SignInPayload, SignUpPayload } from "./types";
 
 import { APIService } from "./APIService";
-import { AnyCnameRecord } from "node:dns";
+import { AxiosResponse } from "axios";
 const API_URL = "https://baseballcloud-back.herokuapp.com/api/v1/auth";
 const UPLOAD_URL =
   "https://baseballcloud-back.herokuapp.com/api/v1/s3/signed_url";
+interface ResponseType {
+  success: boolean;
+  errors: string[];
+}
 const fetchService = {
   signIn: async (payload: SignInPayload) => {
-    return await APIService.post(`${API_URL}/sign_in`, payload).then((res) => {
+    const res: any = await APIService.post(`${API_URL}/sign_in`, payload);
+    if (!res.errors) {
       localStorage.setItem("token", res.headers["access-token"]);
       localStorage.setItem("client", res.headers["client"]);
       localStorage.setItem("uid", res.headers["uid"]);
-      return res;
-    });
+    }
+    return res;
   },
 
   validateToken: () => {
@@ -31,12 +36,13 @@ const fetchService = {
   },
 
   signUp: async (payload: SignUpPayload) => {
-    return await APIService.post(`${API_URL}`, payload).then((res) => {
+    const res = await APIService.post(`${API_URL}`, payload);
+    if (!res.errors) {
       localStorage.setItem("token", res.headers["access-token"]);
       localStorage.setItem("client", res.headers["client"]);
       localStorage.setItem("uid", res.headers["uid"]);
-      return res;
-    });
+    }
+    return res;
   },
   forgotPassword: async (email: string) => {
     return await APIService.post(`${API_URL}/password`, {

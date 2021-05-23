@@ -33,7 +33,6 @@ const FormSelect: React.FC<FormSelectProps> = ({
     : typeof input.value === "object"
     ? { value: input, label: input.value.name }
     : { value: input.value, label: input.value };
-
   return (
     <SelectElement
       defaultValue={defaultValues}
@@ -46,7 +45,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
       isMulti={isMulti}
       placeholder={placeholder}
       onInputChange={() => {}}
-      controlShouldRenderValue={isShouldRenderValue}
+      controlShouldRenderValue={input.value}
     />
   );
 };

@@ -17,11 +17,12 @@ import {
 } from "./RegistrationStyle";
 import { Form, Field } from "react-final-form";
 import { faLock, faUser, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { AxiosResponse } from "axios";
 import fetchAPI from "../../../APIService/fetchService";
 import { userActions } from "../../../Store";
 import { useDispatch } from "react-redux";
 import { AuthInput, SubmitButton } from "../../../Components";
+import { validation } from "../../../Utils";
+import { FORM_ERROR } from "final-form";
 
 interface RegistrationProps {}
 interface RegValues {
@@ -46,13 +47,18 @@ const Registration: React.FC<RegistrationProps> = ({}) => {
     password,
     password_confirmation,
   }: RegValues) => {
-    const res: AxiosResponse = await fetchAPI.signUp({
+    const res: any = await fetchAPI.signUp({
       email,
       password,
       password_confirmation,
       role,
     });
-    dispatch(userActions.setToken(res.headers["access-token"]));
+
+    if (res.errors && !res.success) {
+      return { email: res.errors.full_messages[0] };
+    } else {
+      dispatch(userActions.setToken(res.headers["access-token"]));
+    }
   };
   return (
     <RegistrationWrapper>
@@ -88,15 +94,20 @@ const Registration: React.FC<RegistrationProps> = ({}) => {
             : "Coaches and scouts can view players in the system but do not have their own profile."}
         </SubTitle>
       </RegistrationNote>
-      <Form onSubmit={handleSubmit}>
-        {({ handleSubmit }) => (
+      <Form
+        onSubmit={handleSubmit}
+        validate={(values) => validation.passwordEqualValidation(values)}
+      >
+        {({ handleSubmit, submitError }) => (
           <div>
-            <Field name="email">
-              {(props) => (
-                <AuthInput placeholder="Email" icon={faUser} {...props} />
-              )}
+            <Field name="email" validate={validation.emailValidate}>
+              {(props) => {
+                return (
+                  <AuthInput placeholder="Email" icon={faUser} {...props} />
+                );
+              }}
             </Field>
-            <Field name="password">
+            <Field name="password" validate={validation.passwordValidation}>
               {(props) => (
                 <AuthInput
                   placeholder="Password"

@@ -1,18 +1,11 @@
 import mapValues from "lodash.mapvalues";
 
 export const transformData = (data: any) => {
-  // if (typeof data === "object") {
   return mapValues(data, (i: any) => {
     return i !== data.avatar && i !== data.biography && typeof i === "string"
       ? decorateText(i)
       : i;
   });
-  //}
-  // else data.map((i: any) => {
-  //   return i !== data.avatar && i !== data.biography && typeof i === "string"
-  //       ? decorateText(i)
-  //       : i;
-  // })
 };
 
 const decorateText = (text: string) => {

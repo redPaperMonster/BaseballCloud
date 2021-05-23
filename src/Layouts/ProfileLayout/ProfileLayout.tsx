@@ -12,7 +12,6 @@ interface ProfileLayoutProps {
   match?: any;
 }
 const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, match }) => {
-  console.log(`profile layout`);
   return (
     <Main>
       <Header isAuthorized />

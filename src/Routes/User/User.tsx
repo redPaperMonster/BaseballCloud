@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import RouteWrapper, { LayoutType } from "../Components/RouteWrapper";
+import RouteWrapper from "../Components/RouteWrapper";
 import { UserPaths } from "../routes";
 import { queries } from "./Profile/Schemas";
 import { useQuery } from "@apollo/client";

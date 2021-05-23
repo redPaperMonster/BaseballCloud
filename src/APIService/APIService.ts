@@ -14,8 +14,8 @@ export class APIService {
   }
 
   static async post(url: string, payload: any, configs: any = config) {
-    return await this.service.post(url, payload, configs).catch((error) => {
-      return error;
+    return await this.service.post(url, payload, configs).catch((e) => {
+      return e.response.data;
     });
   }
 

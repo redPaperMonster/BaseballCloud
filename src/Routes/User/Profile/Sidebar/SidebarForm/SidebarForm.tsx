@@ -4,11 +4,12 @@ import { Field, Form } from "react-final-form";
 import { useDispatch } from "react-redux";
 import { FormInput, FormSelect, SubmitButton } from "../../../../../Components";
 import { userActions } from "../../../../../Store";
-import { transformData } from "../../../../../Utils";
+import { transformData, validation } from "../../../../../Utils";
 import { mutations, queries } from "../../Schemas";
 import {
   ChoosePhotoLabel,
   ChoosePhotoLabelWrapper,
+  ErrorText,
   FormButtonContainer,
   FormButtonWrapper,
   FormsSelectWrapper,
@@ -25,6 +26,7 @@ import {
   UserImage,
 } from "./SidebarFormStyle";
 import fetchService from "../../../../../APIService/fetchService";
+import { FORM_ERROR } from "final-form";
 interface SidebarFormProps {
   setFormShow: () => void;
 }
@@ -134,8 +136,9 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
           teams: userData.teams,
           facilities: userData.facilities,
         }}
+        validate={(values) => validation.sidebarFormValidation(values)}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, submitError, errors, values }) => (
           <div>
             <ImageWrapper>
               <UserImage url={imagePreview} />
@@ -164,13 +167,14 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
               </ChoosePhotoLabelWrapper>
             </ImageWrapper>
             <NameFormsWrapper>
-              <Field name="first_name">
+              <Field name="first_name" validate={validation.required}>
                 {(props) => <FormInput placeholder="First name" {...props} />}
               </Field>
-              <Field name="last_name">
+              <Field name="last_name" validate={validation.required}>
                 {(props) => <FormInput placeholder="Last name" {...props} />}
               </Field>
             </NameFormsWrapper>
+
             <FormsSelectWrapper>
               <Field name="position">
                 {(props) => (
@@ -196,13 +200,13 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
             <TitleWrapper>
               <FormTitle>Personal Info</FormTitle>
             </TitleWrapper>
-            <Field name="age">
+            <Field name="age" validate={validation.ageValidation}>
               {(props) => (
                 <FormInput placeholder="Age*" {...props} type="number" />
               )}
             </Field>
             <HeightWrapper>
-              <Field name="feet">
+              <Field name="feet" validate={validation.heightValidation}>
                 {(props) => (
                   <FormInput placeholder="Feet" {...props} type="number" />
                 )}
@@ -213,7 +217,7 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
                 )}
               </Field>
             </HeightWrapper>
-            <Field name="weight">
+            <Field name="weight" validate={validation.weightValidation}>
               {(props) => (
                 <FormInput placeholder="Weight" {...props} type="number" />
               )}
@@ -302,12 +306,13 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
             </TitleWrapper>
 
             <Field name="biography">
-              {({ input }) => (
+              {({ input, meta }) => (
                 <FormTextareaWrapper>
                   <FormTextarea
                     value={input.value}
                     onChange={(e) => input.onChange(e.currentTarget.value)}
                   />
+                  {meta.error && <ErrorText>{meta.error}</ErrorText>}
                 </FormTextareaWrapper>
               )}
             </Field>

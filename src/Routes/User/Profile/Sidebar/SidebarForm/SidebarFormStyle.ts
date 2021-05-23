@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../../../../Utils";
 import { SidebarFormStyleProps } from "./SidebarForm";
 
 export const ImageWrapper = styled.div`
@@ -135,4 +136,11 @@ export const FormButtonWrapper = styled.div`
   margin-right: 12px;
   width: 100%;
   flex: 1 1 auto;
+`;
+
+export const ErrorText = styled.div`
+  display: flex;
+  color: ${colors.red};
+  margin-top: 8px;
+  margin-bottom: 4px;
 `;

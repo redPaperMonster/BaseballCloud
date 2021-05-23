@@ -12,9 +12,13 @@ import {
   SubTitle,
   Title,
   TitleWrapper,
+  ErrorText,
+  ErrorWrapper,
 } from "./LoginStyle";
 import { AuthInput, SubmitButton } from "../../../Components";
 import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { validation } from "../../../Utils";
+import { FORM_ERROR } from "final-form";
 
 interface LoginProps {}
 interface LoginValues {
@@ -24,8 +28,12 @@ interface LoginValues {
 const Login: React.FC<LoginProps> = ({}) => {
   const dispatch = useDispatch();
   const handleSubmit = async ({ email, password }: LoginValues) => {
-    const res: AxiosResponse = await fetchAPI.signIn({ email, password });
-    dispatch(userActions.setToken(res.headers["access-token"]));
+    const res = await fetchAPI.signIn({ email, password });
+    if (res.errors && !res.success) {
+      return { [FORM_ERROR]: res.errors[0] };
+    } else {
+      dispatch(userActions.setToken(res.headers["access-token"]));
+    }
   };
 
   return (
@@ -35,7 +43,7 @@ const Login: React.FC<LoginProps> = ({}) => {
         <SubTitle>Sign into your account here:</SubTitle>
       </TitleWrapper>
       <Form onSubmit={handleSubmit}>
-        {({ handleSubmit }) => (
+        {({ handleSubmit, submitError }) => (
           <div>
             <Field name="email">
               {(props) => (
@@ -52,6 +60,12 @@ const Login: React.FC<LoginProps> = ({}) => {
                 />
               )}
             </Field>
+            {submitError && (
+              <ErrorWrapper>
+                <ErrorText>{submitError}</ErrorText>
+              </ErrorWrapper>
+            )}
+
             <SubmitButton onClick={handleSubmit} title="Sign in" />
           </div>
         )}

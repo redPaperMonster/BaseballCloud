@@ -1,5 +1,4 @@
 export enum AuthPaths {
-  // login = "/",
   login = "/login",
   registration = "/registration",
   forgotPassword = "/forgotpassword",

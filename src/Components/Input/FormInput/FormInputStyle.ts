@@ -62,3 +62,10 @@ export const Input = styled.input`
   -webkit-appearance: none; 
   margin: 0; 
 } `;
+
+export const ErrorText = styled.div`
+  display: flex;
+  color: ${colors.red};
+  margin-top: 8px;
+  margin-bottom: 4px;
+`;
