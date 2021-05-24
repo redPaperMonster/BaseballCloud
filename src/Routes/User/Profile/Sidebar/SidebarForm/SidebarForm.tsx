@@ -2,7 +2,13 @@ import { useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { Field, Form } from "react-final-form";
 import { useDispatch } from "react-redux";
-import { FormInput, FormSelect, SubmitButton } from "../../../../../Components";
+import {
+  FormInput,
+  FormSelect,
+  LoaderWrapper,
+  SubmitButton,
+  ToastBody,
+} from "../../../../../Components";
 import { userActions } from "../../../../../Store";
 import { transformData, validation } from "../../../../../Utils";
 import { mutations, queries } from "../../Schemas";
@@ -26,7 +32,8 @@ import {
   UserImage,
 } from "./SidebarFormStyle";
 import fetchService from "../../../../../APIService/fetchService";
-import { FORM_ERROR } from "final-form";
+import { toast } from "react-toastify";
+import Loader from "react-loader-spinner";
 interface SidebarFormProps {
   setFormShow: () => void;
 }
@@ -73,7 +80,11 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
     variables: { search: "" },
   });
   if (schools.loading || teams.loading || facilities.loading || loading) {
-    return <h1>LOADING....</h1>;
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
   }
   const userData = transformData(data.current_profile);
 
@@ -97,6 +108,9 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
         },
       },
     }).then(() => {
+      toast.success(() => (
+        <ToastBody text="Profile has been updated successfully." />
+      ));
       dispatch(userActions.setData(values));
     });
     setFormShow();

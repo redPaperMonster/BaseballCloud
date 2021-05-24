@@ -10,6 +10,8 @@ import { fetchAPI } from "../../APIService";
 import { ProfileLayout, UserListLayout } from "../../Layouts";
 import UserProfile from "./Profile/UserProfile";
 import { LeaderBoard, Network } from ".";
+import { LoaderWrapper } from "../../Components";
+import Loader from "react-loader-spinner";
 
 interface UserRouteProps {}
 
@@ -25,7 +27,11 @@ const UserRoute: React.FC<UserRouteProps> = ({}) => {
   const dispatch = useDispatch();
 
   if (loading) {
-    return <h1>LOADING....</h1>;
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
   }
 
   dispatch(userActions.setData(data.current_profile));

@@ -42,3 +42,7 @@ export const PlayersCount = styled.div`
   text-align: left;
 `;
 export const PlayerInputWrapper = styled.div``;
+
+export const FilterWrapper = styled.div`
+  margin-left: 15px;
+`;

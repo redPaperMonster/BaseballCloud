@@ -1,7 +1,9 @@
 import { useQuery } from "@apollo/client";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import Loader from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
+import { LoaderWrapper } from "../../../Components";
 import { userSelector } from "../../../Store";
 import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
 import ProgressItem from "./Components/ProgressItem/ProgressItem";
@@ -18,20 +20,22 @@ import {
   TabsSection,
 } from "./UserProfileStyle";
 interface UserProfileProps {
-  params?: any;
+  match?: any;
 }
-const UserProfile: React.FC<UserProfileProps> = ({ params }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ match }) => {
   let userId = useSelector(userSelector.getUserId());
-
   const { loading, data } = useQuery(queries.getBattingSummary, {
-    variables: { id: (params && params.id) || userId },
+    variables: { id: (match.params && match.params.id) || userId },
   });
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
   }
   const topValues = data.batting_summary.top_values[0];
-
   return (
     <div>
       <SummaryEventsWrapper>

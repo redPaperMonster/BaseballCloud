@@ -11,4 +11,5 @@ export { default as ThrowIcon } from "./ProfileIcons/ThrowIcon";
 export { default as BatsIcon } from "./ProfileIcons/BatsIcon";
 export { default as FavoriteIcon } from "./ProfileIcons/FavoriteIcon";
 export { default as FavoriteIconActive } from "./ProfileIcons/FavoriteIconActive";
+export { default as SuccessIcon } from "./SuccessIcon";
 export { default as DateIcon } from "./DateIcon";

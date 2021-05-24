@@ -176,6 +176,19 @@ const queries = {
       }
     }
   `,
+  getProfileEvents: gql`
+    query ProfileEvents($input: FilterProfileEventsInput!) {
+      profile_events(input: $input) {
+        events {
+          id
+          date
+          event_type
+          event_name
+        }
+        total_count
+      }
+    }
+  `,
 };
 
 export default queries;

@@ -16,17 +16,49 @@ import {
 } from "./SessionTabStyle";
 import "react-datepicker/dist/react-datepicker.css";
 import { DatePickerCustomInput } from "./Components";
+import dayjs from "dayjs";
+import { useQuery } from "@apollo/client";
+import { queries } from "../../Schemas";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../../../../Store";
+import { LoaderWrapper } from "../../../../../Components";
+import Loader from "react-loader-spinner";
+dayjs().format();
 function SessionTab() {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<any>();
+  let userId = useSelector(userSelector.getUserId());
+
+  const { loading, data } = useQuery(queries.getProfileEvents, {
+    variables: {
+      input: {
+        profile_id: userId,
+        date: dayjs(date ? date : new Date()).format("D-MM-YYYY"),
+        count: 10,
+        offset: 0,
+      },
+    },
+  });
+
+  if (loading) {
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
+  }
   return (
     <TabContainer>
       <SessionHeader>
         <SessionTitle>Sessions</SessionTitle>
         <FilterWrapper>
-          <ClearFiltersButton>Clear Filters</ClearFiltersButton>
+          <ClearFiltersButton onClick={() => setDate("")}>
+            Clear Filters
+          </ClearFiltersButton>
           <DatePickerWrapperStyles />
           <DatePicker
-            onChange={() => {}}
+            dateFormat="dd/MM/yyyy"
+            selected={date}
+            onChange={(date) => setDate(date)}
             popperClassName="date_picker full-width"
             customInput={<DatePickerCustomInput />}
           />

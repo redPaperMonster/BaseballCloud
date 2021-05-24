@@ -19,7 +19,7 @@ function LogTab() {
   return (
     <TabContainer>
       <LogHeader>
-        <FindInput placeholder="Search" />
+        <FindInput placeholder="Search" onChange={() => {}} />
         <FilterSelect
           width="120"
           options={logOptions}

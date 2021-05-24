@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
-import { FilterSelect } from "../../../../../Components";
+import Loader from "react-loader-spinner";
+import { FilterSelect, LoaderWrapper } from "../../../../../Components";
 import { queries } from "../../Schemas";
 import {
   FilterContainer,
@@ -23,7 +24,12 @@ const BattingTab: React.FC<BattingTabProps> = ({}) => {
   const { loading, error, data } = useQuery(queries.getLeaderBoardBatting, {
     variables: { input: { type: currentFilter } },
   });
-  if (loading) return <h1>LOADING...</h1>;
+  if (loading)
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
   return (
     <TabContainer>
       <FilterContainer>

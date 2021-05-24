@@ -24,9 +24,11 @@ function LeaderBoard() {
             placeholder="Team"
             width="40"
             handleFocus
+            onChange={() => {}}
           />
           <FilterWrapper>
             <FilterInput
+              onChange={() => {}}
               icon={<BoldArrowIcon />}
               placeholder="School"
               width="50"

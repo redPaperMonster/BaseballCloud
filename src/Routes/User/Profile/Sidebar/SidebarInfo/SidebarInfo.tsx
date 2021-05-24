@@ -31,6 +31,8 @@ import SchoolInfoItem from "./Components/SchoolInfoItem/SchoolInfoItem";
 import SidebarFavoriteButton from "./Components/SidebarFavoriteButton/SidebarFavoriteButton";
 import { useQuery } from "@apollo/client";
 import { queries } from "../../Schemas";
+import { StyledToast, LoaderWrapper } from "../../../../../Components";
+import Loader from "react-loader-spinner";
 
 interface SidebarInfoProps {
   setFormShow?: () => void;
@@ -61,7 +63,11 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
     }
   }, [data, player, user]);
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
   }
   if (!playerData) return null;
   return (
@@ -155,6 +161,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
           </div>
         )}
       </SchoolInfo>
+      <StyledToast />
     </div>
   );
 };

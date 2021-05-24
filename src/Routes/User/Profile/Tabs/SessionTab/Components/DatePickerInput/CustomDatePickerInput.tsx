@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { BoldArrowIcon, DateIcon } from "../../../../../../../Assets/icons";
 import {
@@ -16,7 +16,7 @@ const DatePickerCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <IconWrapper>
           <DateIcon />
         </IconWrapper>
-        Date
+        {props.value || "Date"}
         <ArrowIconWrapper>
           <BoldArrowIcon />
         </ArrowIconWrapper>

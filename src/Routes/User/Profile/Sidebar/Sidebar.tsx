@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import SidebarForm from "./SidebarForm/SidebarForm";
 import SidebarInfo from "./SidebarInfo/SidebarInfo";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { StyledToast } from "../../../../Components";
 import { userSelector } from "../../../../Store";
@@ -17,7 +16,6 @@ const Sidebar: React.FC<SidebarProps> = ({ params }) => {
   const requiredUserData = useSelector(userSelector.getUserRequiredData());
 
   const handleShowForm = () => {
-    toast("Success!");
     setFormShow(!isFormShow);
   };
   if (params && params.id) {
@@ -41,7 +39,6 @@ const Sidebar: React.FC<SidebarProps> = ({ params }) => {
         isPlayerProfile
         params={params}
       />
-      <StyledToast />
     </div>
   );
 };

@@ -9,4 +9,6 @@ export { default as FilterSelect } from "./Select/FilterSelect/FilterSelect";
 export { default as FavoriteButton } from "./Button/FavoriteButton/FavoriteButton";
 
 export { default as FindInput } from "./Input/FindInput/FindInput";
-export { StyledToast } from "./Toast/Toast";
+export { StyledToast } from "./Toast/ToastStyle";
+export { default as ToastBody } from "./Toast/ToastBody";
+export { LoaderWrapper } from "./Loader/LoaderWrapper";

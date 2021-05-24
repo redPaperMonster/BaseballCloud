@@ -8,7 +8,6 @@ import {
   ComparisonTable,
   ComparisonTableCell,
   ComparisonTableRow,
-  FindInput,
   PlayerAvatar,
   PlayerSection,
   TabContainer,
@@ -33,20 +32,26 @@ function ComparisonTab() {
         </UserSection>
         <PlayerSection>
           <PlayerAvatar url={userData.avatar} />
-          <FilterInput icon={<SearchIcon />} placeholder="Enter players name" />
+          <FilterInput
+            icon={<SearchIcon />}
+            placeholder="Enter players name"
+            onChange={() => {}}
+          />
         </PlayerSection>
       </ComparisonHeader>
       <ComparisonTable>
         <ComparisonTableRow>
-          <ComparisonTableCell>Age: 22</ComparisonTableCell>
+          <ComparisonTableCell>Age: {userData.age}</ComparisonTableCell>
           <ComparisonTableCell>Age: 12</ComparisonTableCell>
         </ComparisonTableRow>
         <ComparisonTableRow>
-          <ComparisonTableCell>Height: 22</ComparisonTableCell>
+          <ComparisonTableCell>
+            Height: {userData.feet} ft {userData.inches || "0"} in
+          </ComparisonTableCell>
           <ComparisonTableCell>Height: 12</ComparisonTableCell>
         </ComparisonTableRow>
         <ComparisonTableRow>
-          <ComparisonTableCell>Weight: 22</ComparisonTableCell>
+          <ComparisonTableCell>Weight: {userData.weight}</ComparisonTableCell>
           <ComparisonTableCell>Weight: 12</ComparisonTableCell>
         </ComparisonTableRow>
       </ComparisonTable>

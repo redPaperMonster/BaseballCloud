@@ -9,6 +9,8 @@ import { useMutation } from "@apollo/client";
 import mutations from "./Mutations";
 import { useDispatch } from "react-redux";
 import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
+import { toast } from "react-toastify";
+import { ToastBody } from "../..";
 
 interface FavoriteProps {
   isFavorite: boolean;
@@ -26,6 +28,16 @@ const FavoriteButton: React.FC<FavoriteProps> = ({ isFavorite, id }) => {
     updateFavorite({
       variables: { form: { favorite: !isFavorite, profile_id: id } },
     }).then((data) => {
+      toast.success(() => (
+        <ToastBody
+          text={
+            isChecked
+              ? "This profile removed from favorite list successfully!"
+              : "This profile added to favorite list successfully!"
+          }
+        />
+      ));
+
       dispatch(
         playerActions.updateFavorite({
           id,
