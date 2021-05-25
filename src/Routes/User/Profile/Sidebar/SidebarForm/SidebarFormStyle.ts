@@ -172,3 +172,6 @@ export const UploadAvatarWrapper = styled.div`
 export const UploadButtonsWrapper = styled.div`
   padding-top: 12px;
 `;
+export const UploadImageInput = styled.input`
+  display: none;
+`;

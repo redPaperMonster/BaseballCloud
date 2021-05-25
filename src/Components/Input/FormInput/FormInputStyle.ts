@@ -5,6 +5,7 @@ import { FormInputStyleProps } from "./FormInput";
 export const InputWrapper = styled.div`
   display: flex;
   padding-right: 10px;
+  position: relative;
 `;
 
 export const Label = styled.label<FormInputStyleProps>`

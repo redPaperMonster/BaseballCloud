@@ -1,11 +1,10 @@
 import { useQuery } from "@apollo/client";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Loader from "react-loader-spinner";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { LoaderWrapper } from "../../../Components";
 import { userSelector } from "../../../Store";
-import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
 import ProgressItem from "./Components/ProgressItem/ProgressItem";
 import { queries } from "./Schemas";
 import ProfileTabs from "./Tabs/ProfileTabs";
@@ -31,7 +30,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ match }) => {
   if (loading) {
     return (
       <LoaderWrapper>
-        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+        <Loader type="ThreeDots" color="#fff" height={100} width={100} />
       </LoaderWrapper>
     );
   }

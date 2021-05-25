@@ -189,6 +189,29 @@ const queries = {
       }
     }
   `,
+  getPlayersNames: gql`
+    query ProfileNames($input: FilterProfileNamesInput!) {
+      profile_names(input: $input) {
+        profile_names {
+          id
+          position
+          first_name
+          last_name
+          inches
+          feet
+          weight
+          age
+        }
+      }
+    }
+  `,
+  getPlayerAvatar: gql`
+    query Profile($id: String!) {
+      profile(id: $id) {
+        avatar
+      }
+    }
+  `,
 };
 
 export default queries;

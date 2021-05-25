@@ -1,5 +1,4 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import { transformData } from "../../Utils";
 
 const initialState: any[] = [];
 
@@ -13,7 +12,6 @@ export const playerSlice = createSlice({
           state.push(i);
         }
       });
-      transformData(state);
       return state;
     },
     addPlayer: (state, action) => {

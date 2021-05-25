@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mapValues } from "lodash";
-import { transformData } from "../../Utils";
 
 const initialState = {
   token: "",
@@ -32,9 +30,7 @@ export const userSlice = createSlice({
       state.token = action.payload;
     },
     setData: (state, action) => {
-      const newState = transformData(action.payload);
-      state = { ...state, ...newState };
-      return state;
+      return { ...state, ...action.payload };
     },
     resetStore: (state) => {
       state = initialState;

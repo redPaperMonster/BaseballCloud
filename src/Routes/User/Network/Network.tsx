@@ -92,7 +92,7 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
 
   if (!playerData) {
     return (
-      <LoaderWrapper>
+      <LoaderWrapper fullWidth>
         <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
       </LoaderWrapper>
     );

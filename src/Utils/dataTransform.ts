@@ -2,13 +2,17 @@ import mapValues from "lodash.mapvalues";
 
 export const transformData = (data: any) => {
   return mapValues(data, (i: any) => {
-    return i !== data.avatar && i !== data.biography && typeof i === "string"
+    return i !== data.avatar &&
+      i !== data.biography &&
+      i !== data.first_name &&
+      i !== data.last_name &&
+      typeof i === "string"
       ? decorateText(i)
       : i;
   });
 };
 
-const decorateText = (text: string) => {
+export const decorateText = (text: string) => {
   return (
     text &&
     text

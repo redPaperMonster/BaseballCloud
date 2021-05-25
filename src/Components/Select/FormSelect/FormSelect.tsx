@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { FieldInputProps } from "react-final-form";
+import { decorateText } from "../../../Utils";
 import { SelectElement } from "./FormSelectStyle";
 interface FormSelectProps {
   options: {
@@ -34,7 +35,8 @@ const FormSelect: React.FC<FormSelectProps> = ({
       })
     : typeof input.value === "object"
     ? { value: input, label: input.value.name }
-    : { value: input.value, label: input.value };
+    : { value: input.value, label: decorateText(input.value) };
+
   return (
     <SelectElement
       defaultValue={defaultValues}

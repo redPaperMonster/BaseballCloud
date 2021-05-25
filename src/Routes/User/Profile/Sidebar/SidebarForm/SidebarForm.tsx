@@ -10,7 +10,7 @@ import {
   ToastBody,
 } from "../../../../../Components";
 import { userActions, userSelector } from "../../../../../Store";
-import { transformData, validation } from "../../../../../Utils";
+import { validation } from "../../../../../Utils";
 import { mutations, queries } from "../../Schemas";
 import {
   ChoosePhotoLabel,
@@ -34,6 +34,7 @@ import {
   UploadButton,
   UploadButtonsWrapper,
   UploadCancelButton,
+  UploadImageInput,
   UserImage,
 } from "./SidebarFormStyle";
 import fetchService from "../../../../../APIService/fetchService";
@@ -54,20 +55,20 @@ const handsOptions = [
   { value: "R", label: "R" },
 ];
 const positionOptions = [
-  { value: "Catcher", label: "Catcher" },
-  { value: "First Base", label: "First Base" },
-  { value: "Second Base", label: "Second Base" },
-  { value: "Shortstop", label: "Shortstop" },
-  { value: "Third Base", label: "Third Base" },
-  { value: "Outfield", label: "Outfield" },
-  { value: "Pitcher", label: "Pitcher" },
+  { value: "catcher", label: "Catcher" },
+  { value: "first_base", label: "First Base" },
+  { value: "second_base", label: "Second Base" },
+  { value: "shortstop", label: "Shortstop" },
+  { value: "third_base", label: "Third Base" },
+  { value: "outfield", label: "Outfield" },
+  { value: "pitcher", label: "Pitcher" },
 ];
 const schoolYearsOptions = [
-  { value: "Freshman", label: "Freshman" },
-  { value: "Sophomore", label: "Sophomore" },
-  { value: "Junior", label: "Junior" },
-  { value: "Senior", label: "Senior" },
-  { value: "None", label: "None" },
+  { value: "freshman", label: "Freshman" },
+  { value: "sophomore", label: "Sophomore" },
+  { value: "junior", label: "Junior" },
+  { value: "senior", label: "Senior" },
+  { value: "none", label: "None" },
 ];
 const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
   let { loading, data } = useQuery(queries.getCurrentProfile, {});
@@ -204,9 +205,8 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
                       ) : (
                         <ChoosePhotoLabel>
                           Choose Photo
-                          <input
+                          <UploadImageInput
                             type="file"
-                            style={{ display: "none" }}
                             onChange={handleChange}
                           />
                         </ChoosePhotoLabel>

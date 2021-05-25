@@ -7,6 +7,8 @@ interface FilterInputProps {
   handleFocus?: boolean;
   width?: string;
   onChange: Dispatch<SetStateAction<string>>;
+  onFocus?: () => void;
+  value?: string;
 }
 
 export type FilterIconStyleProps = {
@@ -22,16 +24,19 @@ const FilterInput: React.FC<FilterInputProps> = ({
   handleFocus,
   width = "135",
   onChange,
+  onFocus = () => {},
+  value,
 }) => {
   const [isFocused, setFocused] = useState(false);
   return (
     <Wrapper>
       <InputWrapper>
         <Input
-          onFocus={() => handleFocus && setFocused(true)}
+          onFocus={() => (handleFocus ? setFocused(true) : onFocus())}
           placeholder={placeholder}
           onBlur={() => handleFocus && setFocused(false)}
           width={width}
+          value={value}
           onChange={(e) => onChange(e.currentTarget.value)}
         />
       </InputWrapper>

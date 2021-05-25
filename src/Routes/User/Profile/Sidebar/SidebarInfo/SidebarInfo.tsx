@@ -33,7 +33,7 @@ import { useQuery } from "@apollo/client";
 import { queries } from "../../Schemas";
 import { StyledToast, LoaderWrapper } from "../../../../../Components";
 import Loader from "react-loader-spinner";
-
+import image from "../../../../../Assets/img/UserAvatar.png";
 interface SidebarInfoProps {
   setFormShow?: () => void;
   isPlayerProfile?: boolean;
@@ -56,9 +56,9 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
       if (player) {
         setPlayerData(transformData(player));
       } else if (params.id && data) {
-        setPlayerData(data.profile);
+        setPlayerData(transformData(data.profile));
       } else {
-        setPlayerData(user);
+        setPlayerData(transformData(user));
       }
     }
   }, [data, player, user]);
@@ -87,7 +87,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
           )}
         </EditButtonWrapper>
         <ImageWrapper>
-          <UserImage url={playerData.avatar} />
+          <UserImage url={playerData.avatar || image} />
         </ImageWrapper>
         <UserInfoWrapper>
           <UserName>{`${playerData.first_name} ${playerData.last_name}`}</UserName>

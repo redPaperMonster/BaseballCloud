@@ -7,6 +7,7 @@ export const userSelector = {
   getToken: () => createSelector(store, (state) => state.user.token),
   getUserData: () => createSelector(store, (state) => state.user),
   getUserId: () => createSelector(store, (state) => state.user.id),
+  getPosition: () => createSelector(store, (state) => state.user.position),
   getUserRequiredData: () =>
     createSelector(store, (state) => {
       const {
