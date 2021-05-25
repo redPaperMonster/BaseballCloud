@@ -144,3 +144,31 @@ export const ErrorText = styled.div`
   margin-top: 8px;
   margin-bottom: 4px;
 `;
+export const UploadButton = styled.a`
+  color: ${colors.lightBlue};
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+export const UploadCancelButton = styled.a`
+  color: ${colors.darkGray};
+  margin-left: 8px;
+`;
+export const FileNameLabel = styled.label`
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 400;
+  color: #788b99;
+  cursor: pointer;
+  white-space: nowrap;
+`;
+export const UploadAvatarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+export const UploadButtonsWrapper = styled.div`
+  padding-top: 12px;
+`;

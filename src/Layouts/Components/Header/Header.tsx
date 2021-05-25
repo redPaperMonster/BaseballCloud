@@ -5,7 +5,7 @@ import { AuthPaths, UserPaths } from "../../../Routes/routes";
 import {
   HeaderContainer,
   NavContainer,
-  NavLink,
+  NavigationLink,
   NavMenu,
   NavWrapper,
   UserImage,
@@ -35,18 +35,18 @@ const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
       {isAuthorized && (
         <NavContainer>
           <NavWrapper>
-            <NavLink
+            <NavigationLink
               to={UserPaths.leaderBoard}
               active={(pathname === UserPaths.leaderBoard).toString()}
             >
               Leaderboard
-            </NavLink>
-            <NavLink
+            </NavigationLink>
+            <NavigationLink
               to={UserPaths.network}
               active={(pathname === UserPaths.network).toString()}
             >
               Network
-            </NavLink>
+            </NavigationLink>
           </NavWrapper>
           <NavMenu>
             <Link to={UserPaths.profile}>

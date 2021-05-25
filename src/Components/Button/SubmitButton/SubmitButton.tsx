@@ -14,10 +14,11 @@ const SubmitButton: React.FC<SubmitProps> = ({
   title,
   isCancelType = false,
   onClick,
+  children,
 }) => {
   return (
     <Button onClick={onClick} isCancelType={isCancelType}>
-      {title}
+      {children || title}
     </Button>
   );
 };

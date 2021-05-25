@@ -21,6 +21,7 @@ const initialState = {
   school: { id: "", name: "" },
   teams: [],
   facilities: [],
+  recent_events: [],
 };
 
 export const userSlice = createSlice({

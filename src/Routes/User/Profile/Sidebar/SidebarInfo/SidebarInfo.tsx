@@ -69,6 +69,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
       </LoaderWrapper>
     );
   }
+
   if (!playerData) return null;
   return (
     <div>

@@ -19,10 +19,10 @@ export class APIService {
     });
   }
 
-  // TODO: avatar!
   static async put(url: string, body: any) {
     const token = localStorage.getItem("token");
     const client = localStorage.getItem("client");
+
     const uid = localStorage.getItem("uid");
 
     config.headers = {
@@ -31,7 +31,7 @@ export class APIService {
       client: client || "",
       uid: uid || "",
     };
-    return await this.service.put(url, null, config).catch((error) => {
+    return await this.service.put(url, body, config).catch((error) => {
       return error;
     });
   }

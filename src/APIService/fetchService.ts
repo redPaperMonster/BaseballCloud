@@ -53,10 +53,14 @@ const fetchService = {
   logOut: async () => {
     return await APIService.delete(`${API_URL}/sign_out`);
   },
-  // TODO: avatar!
   uploadPhoto: async (payload: any, name: any) => {
     const config = {
       headers: {},
+    };
+    const options = {
+      headers: {
+        "Content-Type": payload.type,
+      },
     };
     const token = localStorage.getItem("token");
     const client = localStorage.getItem("client");
@@ -67,20 +71,10 @@ const fetchService = {
       client: client || "",
       uid: uid || "",
     };
-    const body = new FormData();
-    // body.append("name", payload.name);
-    // body.append("base64", payload.base64);
-    body.append(payload.name, payload);
-    // body.append("name", payload.name);
-    // body.append("size", payload.size);
-    // body.append("type", payload.type);
-    const res = await APIService.post(
-      `${UPLOAD_URL}`,
-      { ...name, ...body },
-      config
-    );
-    const res2 = await APIService.put(res.data.signedUrl, body);
-    return res2;
+
+    const signedRes = await APIService.post(`${UPLOAD_URL}`, name, config);
+    const uploadRes = await APIService.put(signedRes.data.signedUrl, payload);
+    return uploadRes;
   },
 };
 

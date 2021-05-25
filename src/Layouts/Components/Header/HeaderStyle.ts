@@ -24,7 +24,7 @@ export const NavWrapper = styled.nav`
   flex-direction: row;
   align-items: center;
 `;
-export const NavLink = styled(Link)<HeaderLinkStyleProps>`
+export const NavigationLink = styled(Link)<HeaderLinkStyleProps>`
   padding: 0 8px;
   color: ${colors.secondaryText} !important;
   text-decoration: none !important;

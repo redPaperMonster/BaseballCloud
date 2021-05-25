@@ -29,8 +29,10 @@ import {
 } from "./NetworkStyle";
 import "./pagination.css";
 import { queries } from "./Schemas";
-
-function Network() {
+interface NetworkProps {
+  match?: any;
+}
+const Network: React.FC<NetworkProps> = ({ match }) => {
   const [perPage, setPerPage] = useState(10);
   const [offset, setOffset] = useState(0);
   const [pagesCount, setPagesCount] = useState(0);
@@ -88,7 +90,13 @@ function Network() {
     }
   }, [data, schoolFilter]);
 
-  if (!playerData) return null;
+  if (!playerData) {
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+      </LoaderWrapper>
+    );
+  }
 
   return (
     <NetworkContainer>
@@ -170,6 +178,6 @@ function Network() {
       </StyledToast>
     </NetworkContainer>
   );
-}
+};
 
 export default Network;

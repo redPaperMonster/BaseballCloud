@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form } from "react-final-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FormInput,
   FormSelect,
@@ -9,13 +9,14 @@ import {
   SubmitButton,
   ToastBody,
 } from "../../../../../Components";
-import { userActions } from "../../../../../Store";
+import { userActions, userSelector } from "../../../../../Store";
 import { transformData, validation } from "../../../../../Utils";
 import { mutations, queries } from "../../Schemas";
 import {
   ChoosePhotoLabel,
   ChoosePhotoLabelWrapper,
   ErrorText,
+  FileNameLabel,
   FormButtonContainer,
   FormButtonWrapper,
   FormsSelectWrapper,
@@ -29,11 +30,17 @@ import {
   NameFormsWrapper,
   SelectWrapper,
   TitleWrapper,
+  UploadAvatarWrapper,
+  UploadButton,
+  UploadButtonsWrapper,
+  UploadCancelButton,
   UserImage,
 } from "./SidebarFormStyle";
 import fetchService from "../../../../../APIService/fetchService";
 import { toast } from "react-toastify";
 import Loader from "react-loader-spinner";
+import image from "../../../../../Assets/img/UserAvatar.png";
+
 interface SidebarFormProps {
   setFormShow: () => void;
 }
@@ -64,15 +71,28 @@ const schoolYearsOptions = [
 ];
 const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
   let { loading, data } = useQuery(queries.getCurrentProfile, {});
+  const profile = useSelector(userSelector.getUserData());
   const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<any>("");
   const [url, setUrl] = useState<string>();
+  const [userData, setUserData] = useState<any>();
+  const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const [updateUser, updateData] = useMutation(mutations.updateUser);
   const dispatch = useDispatch();
   const schools = useQuery(queries.getSchools, {
     variables: { search: "" },
   });
+  useEffect(() => {
+    if (!loading) {
+      if (profile) {
+        const { token, recent_events, _persist, ...newProfile } = profile;
+        setUserData(newProfile);
+      } else {
+        setUserData(data.current_profile);
+      }
+    }
+  }, [profile]);
   const teams = useQuery(queries.getTeams, {
     variables: { search: "" },
   });
@@ -82,64 +102,69 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
   if (schools.loading || teams.loading || facilities.loading || loading) {
     return (
       <LoaderWrapper>
-        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+        <Loader type="ThreeDots" color="#00BFFF" height={50} width={50} />
       </LoaderWrapper>
     );
   }
-  const userData = transformData(data.current_profile);
 
   const schoolOptions = schools.data.schools.schools.map((i: any) => {
     return { value: i, label: i.name };
   });
   const teamsOptions = teams.data.teams.teams.map((i: any) => {
-    return { value: i, label: i.name };
+    return { value: i.name, label: i.name, payload: i };
   });
   const facilitiesOptions = facilities.data.facilities.facilities.map(
     (i: any) => {
-      return { value: i, label: i.u_name };
+      return { value: i.u_name, label: i.u_name, payload: i };
     }
   );
-  const handleSubmit = (values: any) => {
-    updateUser({
+
+  const handleSubmit = async (values: any) => {
+    setIsUpdating(true);
+    await updateUser({
       variables: {
         form: {
           ...values,
+          avatar: url || values.avatar,
           biography: values.biography || " ",
         },
       },
-    }).then(() => {
+    }).then((res) => {
       toast.success(() => (
-        <ToastBody text="Profile has been updated successfully." />
+        <ToastBody text="Profile has been updated successfully!" />
       ));
-      dispatch(userActions.setData(values));
+      dispatch(userActions.setData(res.data.update_profile.profile));
+      setFormShow();
     });
-    setFormShow();
+    setIsUpdating(false);
   };
 
-  //TODO: avatar!!!
   const handleUpload = async (e: any) => {
-    const res = await fetchService.uploadPhoto(file, { name: file.name });
-
-    setUrl(res.config.url.split("?"));
+    setIsImageUpload(true);
+    const res = await fetchService
+      .uploadPhoto(file, { name: file.name })
+      .then((res) => {
+        setFile(null);
+        return res;
+      });
+    setUrl(res.config.url.split("?")[0]);
+    setIsImageUpload(false);
+  };
+  const handleCancel = async (e: any) => {
+    setFile(null);
+    setUrl("");
   };
   const handleChange = (event: any) => {
-    let reader = new FileReader();
     const file = event.target.files[0];
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      let fileInfo = {
-        name: file.name,
-        type: file.type,
-        size: Math.round(file.size / 1000) + " kB",
-        base64: reader.result,
-        file: file,
-      };
-      setImagePreview(reader.result);
-      setFile(fileInfo);
-      console.log(`fileInfo`, fileInfo);
-    };
+    setFile(file);
   };
-
+  if (!userData) {
+    return (
+      <LoaderWrapper>
+        <Loader type="ThreeDots" color="#00BFFF" height={50} width={50} />
+      </LoaderWrapper>
+    );
+  }
   return (
     <div>
       <Form
@@ -155,16 +180,27 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
         {({ handleSubmit, submitError, errors, values }) => (
           <div>
             <ImageWrapper>
-              <UserImage url={imagePreview} />
+              <UserImage url={url || data.current_profile.avatar || image} />
               <ChoosePhotoLabelWrapper>
                 <Field<FileList> name="avatar">
                   {({ input: { value, onChange, ...input } }) => (
                     <div>
                       {file ? (
-                        <div>
-                          <div>{file.name}</div>
-                          <button onClick={handleUpload}>submit</button>
-                        </div>
+                        <UploadAvatarWrapper>
+                          <FileNameLabel>
+                            {isImageUpload ? "Loading..." : file.name}
+                          </FileNameLabel>
+                          {!isImageUpload && (
+                            <UploadButtonsWrapper>
+                              <UploadButton onClick={handleUpload}>
+                                Upload photo
+                              </UploadButton>
+                              <UploadCancelButton onClick={handleCancel}>
+                                Cancel
+                              </UploadCancelButton>
+                            </UploadButtonsWrapper>
+                          )}
+                        </UploadAvatarWrapper>
                       ) : (
                         <ChoosePhotoLabel>
                           Choose Photo
@@ -338,7 +374,16 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
                   isCancelType
                 />
               </FormButtonWrapper>
-              <SubmitButton onClick={handleSubmit} title="Submit" />
+              <SubmitButton onClick={handleSubmit} title="Submit">
+                {isUpdating && (
+                  <Loader
+                    type="ThreeDots"
+                    color="#fff"
+                    height={10}
+                    width={20}
+                  />
+                )}
+              </SubmitButton>
             </FormButtonContainer>
           </div>
         )}
