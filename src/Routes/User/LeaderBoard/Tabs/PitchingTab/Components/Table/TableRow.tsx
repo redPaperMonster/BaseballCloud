@@ -1,6 +1,8 @@
 import * as React from "react";
 import { FavoriteButton } from "../../../../../../../Components";
+import { TeamDataType } from "../../../../../../../Store";
 import { UserPaths } from "../../../../../../routes";
+import { PitchingDataType } from "../../../../Utils/types";
 import {
   RowContainer,
   TableCell,
@@ -12,8 +14,8 @@ export interface TableRowStyleProps {
 }
 
 export type TableRowProps = {
-  playerData: any; //TODO:
-  rank?: string;
+  playerData: PitchingDataType;
+  rank?: number;
 };
 const PitchingTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
   return (
@@ -33,8 +35,10 @@ const PitchingTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
       </TableNetworkCell>
       <TableNetworkCell width="10">
         {(playerData.teams &&
-          playerData.teams.map((i: any) =>
-            i === playerData.teams.slice(-1)[0] ? i.name : `${i.name}, `
+          playerData.teams.map((i: TeamDataType) =>
+            i === playerData.teams.slice(-1).find(() => true)
+              ? i.name
+              : `${i.name}, `
           )) ||
           "-"}
       </TableNetworkCell>

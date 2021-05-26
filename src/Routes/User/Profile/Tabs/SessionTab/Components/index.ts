@@ -1,1 +1,1 @@
-export { default as DatePickerCustomInput } from "./DatePickerInput/CustomDatePickerInput";
+export { default as DatePickerInput } from "./DatePickerInput/DatePickerInput";

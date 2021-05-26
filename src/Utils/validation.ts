@@ -1,4 +1,6 @@
 import { hasEmptyValues } from "../Routes/User/Profile/Sidebar/Utils/hasEmptyValues";
+import { UserDataType } from "../Store";
+
 export const validation = {
   required: (value: string) => {
     if (typeof value === "string") {
@@ -62,7 +64,7 @@ export const validation = {
     }
     return "Required!";
   },
-  sidebarFormValidation: (values: any) => {
+  sidebarFormValidation: (values: UserDataType) => {
     const {
       first_name,
       last_name,
@@ -89,7 +91,10 @@ export const validation = {
     }
     return {};
   },
-  passwordEqualValidation: (values: any) => {
+  passwordEqualValidation: (values: {
+    password: string;
+    password_confirmation: string;
+  }) => {
     const errors = { password_confirmation: "" };
     if (!values.password_confirmation) {
       errors.password_confirmation = "Required";

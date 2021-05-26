@@ -1,6 +1,5 @@
 import { useMutation } from "@apollo/client";
 import * as React from "react";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -20,7 +19,7 @@ interface FavoriteProps {
 export type FavoriteButtonStyleProps = {};
 
 const SidebarFavoriteButton: React.FC<FavoriteProps> = ({ isFavorite, id }) => {
-  const [updateFavorite, updateData] = useMutation(mutations.updateFavorite);
+  const [updateFavorite] = useMutation(mutations.updateFavorite);
   const dispatch = useDispatch();
   const handleClick = () => {
     updateFavorite({

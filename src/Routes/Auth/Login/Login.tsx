@@ -1,4 +1,3 @@
-import { AxiosResponse } from "axios";
 import React from "react";
 import { useDispatch } from "react-redux";
 import fetchAPI from "../../../APIService/fetchService";
@@ -17,20 +16,18 @@ import {
 } from "./LoginStyle";
 import { AuthInput, SubmitButton } from "../../../Components";
 import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
-import { validation } from "../../../Utils";
 import { FORM_ERROR } from "final-form";
 
-interface LoginProps {}
 interface LoginValues {
   email: string;
   password: string;
 }
-const Login: React.FC<LoginProps> = ({}) => {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const handleSubmit = async ({ email, password }: LoginValues) => {
     const res = await fetchAPI.signIn({ email, password });
     if (res.errors && !res.success) {
-      return { [FORM_ERROR]: res.errors[0] };
+      return { [FORM_ERROR]: res.errors.find(() => true) };
     } else {
       dispatch(userActions.setToken(res.headers["access-token"]));
     }

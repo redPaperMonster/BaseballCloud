@@ -1,18 +1,14 @@
 import * as React from "react";
-import { useState } from "react";
-import { FieldInputProps } from "react-final-form";
-import { decorateText } from "../../../Utils";
+import { FieldInputProps, FieldMetaState } from "react-final-form";
+import { decorateText, SelectOptionType } from "../../../Utils";
 import { SelectElement } from "./FormSelectStyle";
 interface FormSelectProps {
-  options: {
-    value: string | number | { value: string; name: string; payload?: any };
-    label: string;
-  }[];
+  options: SelectOptionType | SelectOptionType[];
   placeholder: string;
+  input: FieldInputProps<any, HTMLElement>;
+  meta: FieldMetaState<any>;
   isSearchable?: boolean;
   isMulti?: boolean;
-  input: FieldInputProps<any, HTMLElement>;
-  meta: any;
 }
 
 export type FormSelectStyleProps = {};
@@ -42,11 +38,13 @@ const FormSelect: React.FC<FormSelectProps> = ({
       defaultValue={defaultValues}
       options={options}
       classNamePrefix="react-select"
-      onChange={(e: any) => {
+      onChange={(e: SelectOptionType | SelectOptionType[]) => {
         input.onChange(
           isArray(e)
-            ? e.map((i: any) => (i.payload ? i.payload : i.value))
-            : e.value
+            ? (e as SelectOptionType[]).map((i: any) =>
+                i.payload ? i.payload : i.value
+              )
+            : (e as SelectOptionType).value
         );
       }}
       isSearchable={isSearchable}

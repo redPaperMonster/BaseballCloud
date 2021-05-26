@@ -2,7 +2,9 @@ import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import Loader from "react-loader-spinner";
 import { FilterSelect, LoaderWrapper } from "../../../../../Components";
+import { battingLeadTypeOptions, SelectOptionType } from "../../../../../Utils";
 import { queries } from "../../Schemas";
+import { BatterDataType } from "../../Utils/types";
 import {
   FilterContainer,
   FilterWrapper,
@@ -15,12 +17,11 @@ export interface TableHeaderProps {
   width: string;
 }
 interface BattingTabProps {}
-const leadTypeOptions = [
-  { value: "exit_velocity", label: "Exit Velocity" },
-  { value: "carry_distance", label: "Carry Distance" },
-];
+
 const BattingTab: React.FC<BattingTabProps> = ({}) => {
-  const [currentFilter, setCurrentFilter] = useState(leadTypeOptions[0].value);
+  const [currentFilter, setCurrentFilter] = useState(
+    battingLeadTypeOptions.find(() => true)?.value
+  );
   const { loading, error, data } = useQuery(queries.getLeaderBoardBatting, {
     variables: { input: { type: currentFilter } },
   });
@@ -35,23 +36,19 @@ const BattingTab: React.FC<BattingTabProps> = ({}) => {
       <FilterContainer>
         <FilterWrapper>
           <FilterSelect
-            options={leadTypeOptions}
-            defaultValue={leadTypeOptions[0]}
-            onInputChange={(e: any) => setCurrentFilter(e.value)}
+            options={battingLeadTypeOptions}
+            defaultValue={battingLeadTypeOptions.find(() => true)}
+            onInputChange={(e: SelectOptionType) =>
+              setCurrentFilter(e.value.toString())
+            }
             width="150"
           />
         </FilterWrapper>
       </FilterContainer>
       <TableHeader />
       {data.leaderboard_batting.leaderboard_batting.map(
-        (item: any, index: string) => {
-          return (
-            <TableRow
-              playerData={item}
-              rank={(+index + 1).toString()}
-              key={index}
-            />
-          );
+        (item: BatterDataType, index: number) => {
+          return <TableRow playerData={item} rank={++index} key={index} />;
         }
       )}
     </TabContainer>

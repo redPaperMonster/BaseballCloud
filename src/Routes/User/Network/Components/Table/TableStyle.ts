@@ -20,7 +20,6 @@ export const TableHeaderItemWrapper = styled.div`
 export const TableHeaderItem = styled.div<TableHeaderItemStyleProps>`
   min-width: 0;
   width: ${(props) => props.width}%;
-  flex: 1 0 ${(props) => props.width}%;
   display: flex;
 `;
 export const TableHeaderContainer = styled.div`
@@ -43,7 +42,6 @@ export const RowContainer = styled.div`
 export const TableCell = styled.div<TableRowStyleProps>`
   padding-left: 6px;
   width: ${(props) => props.width}%;
-  flex: 1 0 ${(props) => props.width}%;
   min-width: 0;
   font-size: 14px;
   color: ${colors.lightBlack};
@@ -51,15 +49,12 @@ export const TableCell = styled.div<TableRowStyleProps>`
 export const TableCellLink = styled(Link)<TableRowStyleProps>`
   padding-left: 6px;
   width: ${(props) => props.width}%;
-  flex: 1 0 ${(props) => props.width}%;
   min-width: 0;
   font-size: 14px;
   color: ${colors.lightBlack};
 `;
 
-export const TableNetworkCell = styled(TableCell)`
-  padding-left: 20px;
-`;
+export const TableNetworkCell = styled(TableCell)``;
 export const TableNetworkCellLink = styled(TableCellLink)`
   padding-left: 20px;
 `;

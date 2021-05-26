@@ -24,15 +24,10 @@ export const SelectElement = styled(CreatableSelect)`
     }
     box-shadow: none;
   }
-  .react-select__indicators {
-  }
-  .react-select__option {
-  }
   .react-select__indicator-separator {
     display: none;
   }
-  .react-select__value {
-  }
+
   .react-select__value-container {
     &:hover {
       outline: none;

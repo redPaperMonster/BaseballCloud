@@ -1,12 +1,14 @@
 import React from "react";
-
+import { PlayerDataType } from "../../../../../../../Store";
 import { DropdownListItem } from "./SearchDropdownItemStyle";
 
 interface DropdownProps {
-  player: any;
-  setCurrentPlayer: any;
-  setIsOpened: any;
-  setPlayerName: any;
+  player: PlayerDataType;
+  setCurrentPlayer: React.Dispatch<
+    React.SetStateAction<PlayerDataType | undefined>
+  >;
+  setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setPlayerName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SearchDropdownItem: React.FC<DropdownProps> = ({

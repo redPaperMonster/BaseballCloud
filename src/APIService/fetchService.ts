@@ -1,46 +1,27 @@
 import { SignInPayload, SignUpPayload } from "./types";
 
 import { APIService } from "./APIService";
-import { AxiosResponse } from "axios";
 const API_URL = "https://baseballcloud-back.herokuapp.com/api/v1/auth";
 const UPLOAD_URL =
   "https://baseballcloud-back.herokuapp.com/api/v1/s3/signed_url";
-interface ResponseType {
-  success: boolean;
-  errors: string[];
-}
+
 const fetchService = {
   signIn: async (payload: SignInPayload) => {
-    const res: any = await APIService.post(`${API_URL}/sign_in`, payload);
+    const res = await APIService.post(`${API_URL}/sign_in`, payload);
     if (!res.errors) {
-      localStorage.setItem("token", res.headers["access-token"]);
-      localStorage.setItem("client", res.headers["client"]);
-      localStorage.setItem("uid", res.headers["uid"]);
+      setAuthData(res.headers);
     }
     return res;
   },
 
   validateToken: () => {
-    const token = localStorage.getItem("token");
-    const client = localStorage.getItem("client");
-    const uid = localStorage.getItem("uid");
-    const config = {
-      headers: {
-        "access-token": token || "",
-        client: client || "",
-        uid: uid || "",
-      },
-    };
-
-    return APIService.get(`${API_URL}/validate_token`, config);
+    return APIService.get(`${API_URL}/validate_token`);
   },
 
   signUp: async (payload: SignUpPayload) => {
     const res = await APIService.post(`${API_URL}`, payload);
     if (!res.errors) {
-      localStorage.setItem("token", res.headers["access-token"]);
-      localStorage.setItem("client", res.headers["client"]);
-      localStorage.setItem("uid", res.headers["uid"]);
+      setAuthData(res.headers);
     }
     return res;
   },
@@ -53,29 +34,19 @@ const fetchService = {
   logOut: async () => {
     return await APIService.delete(`${API_URL}/sign_out`);
   },
-  uploadPhoto: async (payload: any, name: any) => {
-    const config = {
-      headers: {},
-    };
-    const options = {
-      headers: {
-        "Content-Type": payload.type,
-      },
-    };
-    const token = localStorage.getItem("token");
-    const client = localStorage.getItem("client");
-    const uid = localStorage.getItem("uid");
-    config.headers = {
-      ...config.headers,
-      "access-token": token || "",
-      client: client || "",
-      uid: uid || "",
-    };
-
-    const signedRes = await APIService.post(`${UPLOAD_URL}`, name, config);
+  uploadPhoto: async (
+    payload: File | undefined,
+    name: { name: string | undefined }
+  ) => {
+    const signedRes = await APIService.post(`${UPLOAD_URL}`, name);
     const uploadRes = await APIService.put(signedRes.data.signedUrl, payload);
     return uploadRes;
   },
 };
 
+const setAuthData = (headers: any) => {
+  localStorage.setItem("token", headers["access-token"]);
+  localStorage.setItem("client", headers["client"]);
+  localStorage.setItem("uid", headers["uid"]);
+};
 export default fetchService;

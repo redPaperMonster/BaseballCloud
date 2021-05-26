@@ -68,4 +68,4 @@ export const ComparisonTableRow = styled.div`
   margin-bottom: 6px;
 `;
 export const ComparisonTableCell = styled.div``;
-export const FindInput = styled.input``;
+export const SearchInput = styled.input``;

@@ -9,7 +9,7 @@ import {
 } from "./DatePickerInputStyle";
 
 type ButtonProps = React.HTMLProps<HTMLButtonElement>;
-const DatePickerCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const DatePickerInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => (
     <InputContainer>
       <InputButton onClick={props.onClick} ref={ref}>
@@ -25,4 +25,4 @@ const DatePickerCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
   )
 );
 
-export default DatePickerCustomInput;
+export default DatePickerInput;

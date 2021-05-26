@@ -1,5 +1,7 @@
 import React from "react";
+import { match } from "react-router-dom";
 import Sidebar from "../../Routes/User/Profile/Sidebar/Sidebar";
+import { MatchProps } from "../../Utils";
 import { Footer, Header } from "../Components";
 import {
   Content,
@@ -9,7 +11,7 @@ import {
 } from "./ProfileLayoutStyle";
 
 interface ProfileLayoutProps {
-  match?: any;
+  match?: match<MatchProps>;
 }
 const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, match }) => {
   return (
@@ -17,7 +19,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, match }) => {
       <Header isAuthorized />
       <MainContent>
         <SidebarWrapper>
-          <Sidebar params={match.params} />
+          <Sidebar params={match?.params} />
         </SidebarWrapper>
 
         <Content>{children}</Content>

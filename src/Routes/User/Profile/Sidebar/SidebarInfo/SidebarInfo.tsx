@@ -8,7 +8,12 @@ import {
   ThrowIcon,
   WeightIcon,
 } from "../../../../../Assets/icons";
-import { playerSelector, userSelector } from "../../../../../Store";
+import {
+  PlayerDataType,
+  playerSelector,
+  UserDataType,
+  userSelector,
+} from "../../../../../Store";
 import PersonalInfoItem from "./Components/PersonalInfoItem/PersonalInfoItem";
 import { transformData } from "../../../../../Utils";
 import {
@@ -34,23 +39,32 @@ import { queries } from "../../Schemas";
 import { StyledToast, LoaderWrapper } from "../../../../../Components";
 import Loader from "react-loader-spinner";
 import image from "../../../../../Assets/img/UserAvatar.png";
+import {
+  FacilityDataType,
+  TeamDataType,
+} from "../../../../../Store/UserSlice/types";
 interface SidebarInfoProps {
   setFormShow?: () => void;
   isPlayerProfile?: boolean;
-  params?: any;
+  params?: { id: string };
 }
 
 export interface SidebarInfoStyleProps {
   url: string;
 }
 
-const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
-  let user: any = useSelector(userSelector.getUserData());
-  let player: any = useSelector(playerSelector.getPlayerById(params.id));
-  const { loading, data }: any = useQuery(queries.getPlayerProfile, {
+const SidebarInfo: React.FC<SidebarInfoProps> = ({
+  setFormShow,
+  params = { id: "" },
+}) => {
+  let user: UserDataType = useSelector(userSelector.getUserData());
+  let player: PlayerDataType | undefined = useSelector(
+    playerSelector.getPlayerById(params.id)
+  );
+  const { loading, data } = useQuery(queries.getPlayerProfile, {
     variables: { id: (params && params.id) || user.id },
   });
-  const [playerData, setPlayerData] = useState<any>();
+  const [playerData, setPlayerData] = useState<UserDataType | PlayerDataType>();
   useEffect(() => {
     if (!loading) {
       if (player) {
@@ -77,7 +91,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
         <EditButtonWrapper>
           {params && params.id ? (
             <SidebarFavoriteButton
-              isFavorite={playerData.favorite}
+              isFavorite={(playerData as PlayerDataType).favorite || false}
               id={playerData.id}
             />
           ) : (
@@ -87,7 +101,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
           )}
         </EditButtonWrapper>
         <ImageWrapper>
-          <UserImage url={playerData.avatar || image} />
+          <UserImage url={(playerData as UserDataType).avatar || image} />
         </ImageWrapper>
         <UserInfoWrapper>
           <UserName>{`${playerData.first_name} ${playerData.last_name}`}</UserName>
@@ -114,12 +128,12 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
         <PersonalInfoItem
           icon={<ThrowIcon />}
           text="Throws"
-          value={playerData.throws_hand}
+          value={(playerData as UserDataType).throws_hand}
         />
         <PersonalInfoItem
           icon={<BatsIcon />}
           text="Bats"
-          value={playerData.bats_hand}
+          value={(playerData as UserDataType).bats_hand}
         />
       </PersonalInfo>
       <SchoolInfo>
@@ -132,7 +146,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
         {playerData.teams && playerData.teams.length !== 0 && (
           <SchoolInfoItem
             title="Team"
-            text={playerData.teams.map((i: any) => {
+            text={playerData.teams.map((i: TeamDataType) => {
               return (
                 i.name &&
                 (i === playerData.teams.slice(-1)[0] ? i.name : `${i.name}, `)
@@ -140,25 +154,31 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
             })}
           />
         )}
-        {playerData.facilities && playerData.facilities.length !== 0 && (
-          <SchoolInfoItem
-            title="Facility"
-            text={playerData.facilities.map((i: any) => {
-              return (
-                i.u_name &&
-                (i === playerData.facilities.slice(-1)[0]
-                  ? i.u_name
-                  : `${i.u_name}, `)
-              );
-            })}
-          />
-        )}
-        {playerData.biography && (
+        {(playerData as UserDataType).facilities &&
+          (playerData as UserDataType).facilities?.length !== 0 && (
+            <SchoolInfoItem
+              title="Facility"
+              text={
+                (playerData as UserDataType).facilities?.map(
+                  (i: FacilityDataType) => {
+                    return (
+                      i.u_name &&
+                      (i ===
+                      (playerData as UserDataType).facilities?.slice(-1)[0]
+                        ? i.u_name
+                        : `${i.u_name}, `)
+                    );
+                  }
+                ) || ""
+              }
+            />
+          )}
+        {(playerData as UserDataType).biography && (
           <div>
             <TitleWrapper>
               <FormTitle>About</FormTitle>
             </TitleWrapper>
-            <BioText>{playerData.biography}</BioText>
+            <BioText>{(playerData as UserDataType).biography}</BioText>
           </div>
         )}
       </SchoolInfo>

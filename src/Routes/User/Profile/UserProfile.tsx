@@ -1,10 +1,11 @@
 import { useQuery } from "@apollo/client";
-import _ from "lodash";
 import React from "react";
 import Loader from "react-loader-spinner";
 import { useSelector } from "react-redux";
+import { match } from "react-router-dom";
 import { LoaderWrapper } from "../../../Components";
 import { userSelector } from "../../../Store";
+import { MatchProps } from "../../../Utils";
 import ProgressItem from "./Components/ProgressItem/ProgressItem";
 import { queries } from "./Schemas";
 import ProfileTabs from "./Tabs/ProfileTabs";
@@ -19,12 +20,12 @@ import {
   TabsSection,
 } from "./UserProfileStyle";
 interface UserProfileProps {
-  match?: any;
+  match?: match<MatchProps>;
 }
 const UserProfile: React.FC<UserProfileProps> = ({ match }) => {
   let userId = useSelector(userSelector.getUserId());
   const { loading, data } = useQuery(queries.getBattingSummary, {
-    variables: { id: (match.params && match.params.id) || userId },
+    variables: { id: (match?.params && match?.params?.id) || userId },
   });
 
   if (loading) {
@@ -34,7 +35,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ match }) => {
       </LoaderWrapper>
     );
   }
-  const topValues = data.batting_summary.top_values[0];
+  const topValues = data.batting_summary?.top_values.find(() => true);
   return (
     <div>
       <SummaryEventsWrapper>

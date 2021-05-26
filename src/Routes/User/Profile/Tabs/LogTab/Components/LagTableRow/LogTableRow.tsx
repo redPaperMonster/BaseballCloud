@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
+import { PlayerDataType } from "../../../../../../../Store";
 import LogTableHeader from "../LogTableHeader/LogTableHeader";
 
 import {
@@ -17,7 +18,7 @@ export interface ExpandedAreaStyleProps {
 }
 
 export type TableRowProps = {
-  playerData?: any; //TODO:
+  playerData?: PlayerDataType;
   rank?: string;
 };
 const LogTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {

@@ -1,13 +1,14 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { PlayerDataType } from "..";
 
-const initialState: any[] = [];
+const initialState: PlayerDataType[] = [];
 
 export const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
     setData: (state, action) => {
-      action.payload.map((i: any) => {
+      action.payload.map((i: PlayerDataType) => {
         if (!state.find((item) => item.id === i.id)) {
           state.push(i);
         }
@@ -19,7 +20,7 @@ export const playerSlice = createSlice({
       return state;
     },
     updateFavorite: (state, action) => {
-      state.map((i: any) => {
+      state.map((i: PlayerDataType) => {
         if (i.id === action.payload.id) {
           i.favorite = action.payload.favorite;
         }
@@ -28,8 +29,7 @@ export const playerSlice = createSlice({
       return state;
     },
     resetStore: (state) => {
-      state = initialState;
-      return state;
+      return initialState;
     },
   },
 });

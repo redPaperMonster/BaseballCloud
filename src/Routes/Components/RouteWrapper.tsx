@@ -1,17 +1,25 @@
-import React from "react";
+import { ComponentType } from "react";
 import { Route } from "react-router-dom";
 
-const RouteWrapper = ({ Layout, Component, ...rest }: any) => {
+export interface RouteWrapperProps {
+  Layout: React.FC<any>;
+  Component: ComponentType<any>;
+  path: string;
+  exact?: boolean;
+}
+const RouteWrapper: React.FC<RouteWrapperProps> = ({
+  Layout,
+  Component,
+  ...rest
+}) => {
   return (
     <Route
       {...rest}
       render={({ ...props }) => {
-        return Layout ? (
+        return (
           <Layout {...props}>
             <Component {...props} />
           </Layout>
-        ) : (
-          <Component {...props} />
         );
       }}
     />

@@ -22,10 +22,9 @@ import { userActions } from "../../../Store";
 import { useDispatch } from "react-redux";
 import { AuthInput, SubmitButton } from "../../../Components";
 import { validation } from "../../../Utils";
-import { FORM_ERROR } from "final-form";
 
 interface RegistrationProps {}
-interface RegValues {
+interface RegistrationValues {
   email: string;
   password: string;
   password_confirmation: string;
@@ -46,16 +45,15 @@ const Registration: React.FC<RegistrationProps> = ({}) => {
     email,
     password,
     password_confirmation,
-  }: RegValues) => {
-    const res: any = await fetchAPI.signUp({
+  }: RegistrationValues) => {
+    const res = await fetchAPI.signUp({
       email,
       password,
       password_confirmation,
       role,
     });
-
     if (res.errors && !res.success) {
-      return { email: res.errors.full_messages[0] };
+      return { email: res.errors.full_messages.find(() => true) };
     } else {
       dispatch(userActions.setToken(res.headers["access-token"]));
     }
@@ -98,7 +96,7 @@ const Registration: React.FC<RegistrationProps> = ({}) => {
         onSubmit={handleSubmit}
         validate={(values) => validation.passwordEqualValidation(values)}
       >
-        {({ handleSubmit, submitError }) => (
+        {({ handleSubmit }) => (
           <div>
             <Field name="email" validate={validation.emailValidate}>
               {(props) => {

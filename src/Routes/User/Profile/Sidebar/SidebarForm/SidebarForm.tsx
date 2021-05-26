@@ -1,17 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { Field, Form } from "react-final-form";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  FormInput,
-  FormSelect,
-  LoaderWrapper,
-  SubmitButton,
-  ToastBody,
-} from "../../../../../Components";
-import { userActions, userSelector } from "../../../../../Store";
-import { validation } from "../../../../../Utils";
-import { mutations, queries } from "../../Schemas";
+import { FormInput, FormSelect, SubmitButton } from "../../../../../Components";
+import { SelectOptionType, validation } from "../../../../../Utils";
 import {
   ChoosePhotoLabel,
   ChoosePhotoLabelWrapper,
@@ -37,135 +27,53 @@ import {
   UploadImageInput,
   UserImage,
 } from "./SidebarFormStyle";
-import fetchService from "../../../../../APIService/fetchService";
-import { toast } from "react-toastify";
 import Loader from "react-loader-spinner";
 import image from "../../../../../Assets/img/UserAvatar.png";
-
-interface SidebarFormProps {
-  setFormShow: () => void;
-}
+import { UserDataType } from "../../../../../Store";
 
 export interface SidebarFormStyleProps {
   url: string;
 }
 
-const handsOptions = [
-  { value: "L", label: "L" },
-  { value: "R", label: "R" },
-];
-const positionOptions = [
-  { value: "catcher", label: "Catcher" },
-  { value: "first_base", label: "First Base" },
-  { value: "second_base", label: "Second Base" },
-  { value: "shortstop", label: "Shortstop" },
-  { value: "third_base", label: "Third Base" },
-  { value: "outfield", label: "Outfield" },
-  { value: "pitcher", label: "Pitcher" },
-];
-const schoolYearsOptions = [
-  { value: "freshman", label: "Freshman" },
-  { value: "sophomore", label: "Sophomore" },
-  { value: "junior", label: "Junior" },
-  { value: "senior", label: "Senior" },
-  { value: "none", label: "None" },
-];
-const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
-  let { loading, data } = useQuery(queries.getCurrentProfile, {});
-  const profile = useSelector(userSelector.getUserData());
-  const [file, setFile] = useState<any>();
-  const [url, setUrl] = useState<string>();
-  const [userData, setUserData] = useState<any>();
-  const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+interface SidebarFormProps {
+  setFormShow: () => void;
+  handleSubmit: (values: UserDataType) => Promise<void>;
+  userData: UserDataType;
+  url: string | undefined;
+  data: UserDataType;
+  file: File | undefined;
+  isImageUpload: boolean;
+  handleUpload: () => Promise<void>;
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleCancel: () => Promise<void>;
+  positionOptions: SelectOptionType[];
+  handsOptions: SelectOptionType[];
+  schoolOptions: SelectOptionType;
+  isUpdating: boolean;
+  schoolYearsOptions: SelectOptionType[];
+  teamsOptions: SelectOptionType;
+  facilitiesOptions: SelectOptionType;
+}
 
-  const [updateUser, updateData] = useMutation(mutations.updateUser);
-  const dispatch = useDispatch();
-  const schools = useQuery(queries.getSchools, {
-    variables: { search: "" },
-  });
-  useEffect(() => {
-    if (!loading) {
-      if (profile) {
-        const { token, recent_events, _persist, ...newProfile } = profile;
-        setUserData(newProfile);
-      } else {
-        setUserData(data.current_profile);
-      }
-    }
-  }, [profile]);
-  const teams = useQuery(queries.getTeams, {
-    variables: { search: "" },
-  });
-  const facilities = useQuery(queries.getFacilities, {
-    variables: { search: "" },
-  });
-  if (schools.loading || teams.loading || facilities.loading || loading) {
-    return (
-      <LoaderWrapper>
-        <Loader type="ThreeDots" color="#00BFFF" height={50} width={50} />
-      </LoaderWrapper>
-    );
-  }
-
-  const schoolOptions = schools.data.schools.schools.map((i: any) => {
-    return { value: i, label: i.name };
-  });
-  const teamsOptions = teams.data.teams.teams.map((i: any) => {
-    return { value: i.name, label: i.name, payload: i };
-  });
-  const facilitiesOptions = facilities.data.facilities.facilities.map(
-    (i: any) => {
-      return { value: i.u_name, label: i.u_name, payload: i };
-    }
-  );
-
-  const handleSubmit = async (values: any) => {
-    setIsUpdating(true);
-    await updateUser({
-      variables: {
-        form: {
-          ...values,
-          avatar: url || values.avatar,
-          biography: values.biography || " ",
-        },
-      },
-    }).then((res) => {
-      toast.success(() => (
-        <ToastBody text="Profile has been updated successfully!" />
-      ));
-      dispatch(userActions.setData(res.data.update_profile.profile));
-      setFormShow();
-    });
-    setIsUpdating(false);
-  };
-
-  const handleUpload = async (e: any) => {
-    setIsImageUpload(true);
-    const res = await fetchService
-      .uploadPhoto(file, { name: file.name })
-      .then((res) => {
-        setFile(null);
-        return res;
-      });
-    setUrl(res.config.url.split("?")[0]);
-    setIsImageUpload(false);
-  };
-  const handleCancel = async (e: any) => {
-    setFile(null);
-    setUrl("");
-  };
-  const handleChange = (event: any) => {
-    const file = event.target.files[0];
-    setFile(file);
-  };
-  if (!userData) {
-    return (
-      <LoaderWrapper>
-        <Loader type="ThreeDots" color="#00BFFF" height={50} width={50} />
-      </LoaderWrapper>
-    );
-  }
+const SidebarForm: React.FC<SidebarFormProps> = ({
+  setFormShow,
+  handleSubmit,
+  userData,
+  url,
+  data,
+  file,
+  isImageUpload,
+  handleUpload,
+  handleChange,
+  handleCancel,
+  positionOptions,
+  handsOptions,
+  schoolOptions,
+  isUpdating,
+  schoolYearsOptions,
+  teamsOptions,
+  facilitiesOptions,
+}) => {
   return (
     <div>
       <Form
@@ -178,13 +86,13 @@ const SidebarForm: React.FC<SidebarFormProps> = ({ setFormShow }) => {
         }}
         validate={(values) => validation.sidebarFormValidation(values)}
       >
-        {({ handleSubmit, submitError, errors, values }) => (
+        {({ handleSubmit }) => (
           <div>
             <ImageWrapper>
-              <UserImage url={url || data.current_profile.avatar || image} />
+              <UserImage url={url || data.avatar || image} />
               <ChoosePhotoLabelWrapper>
                 <Field<FileList> name="avatar">
-                  {({ input: { value, onChange, ...input } }) => (
+                  {({}) => (
                     <div>
                       {file ? (
                         <UploadAvatarWrapper>

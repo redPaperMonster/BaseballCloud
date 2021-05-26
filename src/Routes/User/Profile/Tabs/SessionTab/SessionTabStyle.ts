@@ -5,7 +5,7 @@ export const TabContainer = styled.div`
   height: 100%;
   width: 100%;
   min-height: 420px;
-  color: #667784;
+  color: ${colors.darkGray};
   font-size: 16px;
 `;
 
@@ -49,7 +49,7 @@ export const TableHeader = styled.div`
   font-size: 14px;
   line-height: 1;
   font-weight: 300;
-  color: #667784;
+  color: ${colors.darkGray};
 `;
 export const TableFirstHeader = styled(TableHeader)`
   width: 35%;
@@ -65,11 +65,11 @@ export const TableItems = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 420px;
-  color: #667784;
+  color: ${colors.darkGray};
   font-size: 16px;
 `;
 export const ClearFiltersButton = styled.button`
-  color: #48bbff;
+  color: ${colors.lightBlue};
   padding: 7px 19px 10px 18px;
   border-radius: 4px;
   box-shadow: none;
@@ -108,7 +108,7 @@ export const DatePickerWrapperStyles = createGlobalStyle`
     border-right-color: #ccc;
 }
     .react-datepicker__triangle{
-      border-bottom-color: #fff !important;
+      border-bottom-color: ${colors.white} !important;
       margin-left: 150px !important;
       
     }

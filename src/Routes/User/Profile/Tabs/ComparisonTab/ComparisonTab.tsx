@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { SearchIcon } from "../../../../../Assets/icons";
 import { FilterInput } from "../../../../../Components";
 import useComponentOpened from "../../../../../Layouts/Components/Dropdown/useComponentOpened";
-import { userSelector } from "../../../../../Store";
+import { PlayerDataType, userSelector } from "../../../../../Store";
 import { queries } from "../../Schemas";
 import {
   ComparisonHeader,
@@ -20,16 +20,17 @@ import {
 } from "./ComparisonTabStyle";
 import SearchDropdown from "./Components/Dropdown/SearchDropdown";
 import image from "../../../../../Assets/img/UserAvatar.png";
+import Loader from "react-loader-spinner";
 export type ComparisonStyleProps = {
   url: string;
 };
 
-function ComparisonTab() {
+const ComparisonTab: React.FC = () => {
   const userData = useSelector(userSelector.getUserData());
   const userPosition = useSelector(userSelector.getPosition());
   const { ref, isOpened, setIsOpened } = useComponentOpened(false);
   const [playerName, setPlayerName] = useState<string>("");
-  const [currentPlayer, setCurrentPlayer] = useState<any>();
+  const [currentPlayer, setCurrentPlayer] = useState<PlayerDataType>();
   const { loading, data } = useQuery(queries.getPlayerAvatar, {
     variables: currentPlayer
       ? {
@@ -46,11 +47,15 @@ function ComparisonTab() {
     <TabContainer>
       <ComparisonHeader>
         <UserSection>
-          <UserAvatar url={userData.avatar} />
+          <UserAvatar url={userData.avatar || image} />
           <UserName>{`${userData.first_name} ${userData.last_name}`}</UserName>
         </UserSection>
         <PlayerSection>
-          <PlayerAvatar url={(data && data.profile.avatar) || image} />
+          {loading ? (
+            <Loader type="TailSpin" color="#00BFFF" height={30} width={30} />
+          ) : (
+            <PlayerAvatar url={(data && data.profile.avatar) || image} />
+          )}
           <div ref={ref}>
             <FilterInput
               icon={<SearchIcon />}
@@ -99,6 +104,6 @@ function ComparisonTab() {
       </ComparisonTable>
     </TabContainer>
   );
-}
+};
 
 export default ComparisonTab;

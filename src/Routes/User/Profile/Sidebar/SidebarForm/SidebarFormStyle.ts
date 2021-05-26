@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../../../../Utils";
-import { SidebarFormStyleProps } from "./SidebarForm";
+import { SidebarFormStyleProps } from "./SidebarFormContainer";
 
 export const ImageWrapper = styled.div`
   display: flex;

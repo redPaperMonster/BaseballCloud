@@ -41,7 +41,7 @@ export const IconWrapper = styled.div`
   left: 17px;
   bottom: 0;
   align-items: start;
-  color: #667784;
+  color: ${colors.darkGray};
   margin-right: 20px;
 `;
 

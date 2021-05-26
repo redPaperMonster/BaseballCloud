@@ -1,5 +1,6 @@
 import { BoldArrowIcon } from "../../../Assets/icons";
 import { FilterInput, FilterSelect } from "../../../Components";
+import { filterPositionOptions } from "../../../Utils/options";
 import {
   FilterContainer,
   FilterWrapper,
@@ -9,10 +10,6 @@ import {
 } from "./LeaderBoardStyle";
 import LeaderBoardTabs from "./Tabs/LeaderBoardTabs";
 
-const positionOptions = [
-  { value: "All", label: "All" },
-  { value: "Catcher", label: "Catcher" },
-];
 function LeaderBoard() {
   return (
     <LeaderBoardContainer>
@@ -37,8 +34,9 @@ function LeaderBoard() {
           </FilterWrapper>
           <FilterWrapper>
             <FilterSelect
-              options={positionOptions}
+              options={filterPositionOptions}
               onInputChange={() => {}}
+              width="120"
               placeholder="Position"
             />
           </FilterWrapper>

@@ -8,7 +8,7 @@ export { default as FormSelect } from "./Select/FormSelect/FormSelect";
 export { default as FilterSelect } from "./Select/FilterSelect/FilterSelect";
 export { default as FavoriteButton } from "./Button/FavoriteButton/FavoriteButton";
 
-export { default as FindInput } from "./Input/FindInput/FindInput";
+export { default as SearchInput } from "./Input/SearchInput/SearchInput";
 export { StyledToast } from "./Toast/ToastStyle";
 export { default as ToastBody } from "./Toast/ToastBody";
 export { LoaderWrapper } from "./Loader/LoaderWrapper";

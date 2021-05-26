@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Input, InputContainer, FindButton } from "./FindInputStyle";
+import { Input, InputContainer, FindButton } from "./SearchInputStyle";
 import { SearchIcon } from "../../../Assets/icons";
-interface FindInputProps {
+interface SearchInputProps {
   placeholder: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FindInput: React.FC<FindInputProps> = ({ placeholder, onChange }) => {
+const SearchInput: React.FC<SearchInputProps> = ({ placeholder, onChange }) => {
   return (
     <InputContainer>
       <FindButton>
@@ -21,4 +21,4 @@ const FindInput: React.FC<FindInputProps> = ({ placeholder, onChange }) => {
     </InputContainer>
   );
 };
-export default FindInput;
+export default SearchInput;

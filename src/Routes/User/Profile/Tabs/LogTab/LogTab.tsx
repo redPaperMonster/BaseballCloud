@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FilterSelect, FindInput } from "../../../../../Components";
+import { FilterSelect, SearchInput } from "../../../../../Components";
+import { logOptions } from "../../../../../Utils/options";
 import LogTableRow from "./Components/LagTableRow/LogTableRow";
 import LogTableHeader from "./Components/LogTableHeader/LogTableHeader";
 import {
@@ -10,16 +11,11 @@ import {
   TableContainer,
 } from "./LogTabStyle";
 
-const logOptions = [
-  { value: "1", label: "None" },
-  { value: "2", label: "Four Seam Fastball" },
-  { value: "3", label: "Slider" },
-];
 function LogTab() {
   return (
     <TabContainer>
       <LogHeader>
-        <FindInput placeholder="Search" onChange={() => {}} />
+        <SearchInput placeholder="Search" onChange={() => {}} />
         <FilterSelect
           width="120"
           options={logOptions}

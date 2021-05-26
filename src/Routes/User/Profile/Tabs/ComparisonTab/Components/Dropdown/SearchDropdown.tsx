@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
-import React, { useEffect } from "react";
+import React from "react";
 import Loader from "react-loader-spinner";
+import { PlayerDataType } from "../../../../../../../Store";
 import { queries } from "../../../../Schemas";
 import SearchDropdownItem from "../DropdownItem/SearchDropdownItem";
 import { DropdownContainer, DropdownPanel } from "./SearchDropdownStyle";
@@ -9,9 +10,11 @@ interface DropdownProps {
   playerName: string;
   userPosition: string;
   isOpened: boolean;
-  setIsOpened: any;
-  setCurrentPlayer: any;
-  setPlayerName: any;
+  setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentPlayer: React.Dispatch<
+    React.SetStateAction<PlayerDataType | undefined>
+  >;
+  setPlayerName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SearchDropdown: React.FC<DropdownProps> = ({
@@ -28,15 +31,17 @@ const SearchDropdown: React.FC<DropdownProps> = ({
   });
   const renderDropdown = () => {
     if (data) {
-      const dropdownList = data.profile_names.profile_names.map((i: any) => (
-        <SearchDropdownItem
-          player={i}
-          key={i.id}
-          setCurrentPlayer={setCurrentPlayer}
-          setIsOpened={setIsOpened}
-          setPlayerName={setPlayerName}
-        />
-      ));
+      const dropdownList = data.profile_names.profile_names.map(
+        (i: PlayerDataType) => (
+          <SearchDropdownItem
+            player={i}
+            key={i.id}
+            setCurrentPlayer={setCurrentPlayer}
+            setIsOpened={setIsOpened}
+            setPlayerName={setPlayerName}
+          />
+        )
+      );
 
       return dropdownList;
     }
@@ -44,7 +49,11 @@ const SearchDropdown: React.FC<DropdownProps> = ({
   if (loading) {
     return <Loader type="ThreeDots" color="#00BFFF" height={30} width={30} />;
   }
-  if (data && data.profile_names && data.profile_names.profile_names[0]) {
+  if (
+    data &&
+    data.profile_names &&
+    data.profile_names.profile_names.find(() => true)
+  ) {
     return (
       <DropdownContainer>
         <DropdownPanel>{renderDropdown()}</DropdownPanel>

@@ -2,7 +2,12 @@ import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import Loader from "react-loader-spinner";
 import { FilterSelect, LoaderWrapper } from "../../../../../Components";
+import {
+  SelectOptionType,
+  pitchingLeadTypeOptions,
+} from "../../../../../Utils";
 import { queries } from "../../Schemas";
+import { PitchingDataType } from "../../Utils/types";
 import TableHeader from "./Components/Table/TableHeader";
 import TableRow from "./Components/Table/TableRow";
 import {
@@ -15,13 +20,11 @@ export interface TableHeaderProps {
   width: string;
 }
 interface PitchingTabProps {}
-const leadTypeOptions = [
-  { value: "pitch_velocity", label: "Pitch Velocity" },
-  { value: "spin_rate", label: "Spin Rate" },
-];
-const PitchingTab: React.FC<PitchingTabProps> = ({}) => {
-  const [currentFilter, setCurrentFilter] = useState(leadTypeOptions[0].value);
 
+const PitchingTab: React.FC<PitchingTabProps> = ({}) => {
+  const [currentFilter, setCurrentFilter] = useState(
+    pitchingLeadTypeOptions[0].value
+  );
   const { loading, error, data } = useQuery(queries.getLeaderboardPitching, {
     variables: { input: { type: currentFilter } },
   });
@@ -36,23 +39,21 @@ const PitchingTab: React.FC<PitchingTabProps> = ({}) => {
       <FilterContainer>
         <FilterWrapper>
           <FilterSelect
-            options={leadTypeOptions}
-            defaultValue={leadTypeOptions[0]}
-            onInputChange={(e: any) => setCurrentFilter(e.value)}
+            options={pitchingLeadTypeOptions}
+            defaultValue={pitchingLeadTypeOptions[0]}
+            onInputChange={(e: SelectOptionType) => {
+              setCurrentFilter(
+                typeof e.value === "string" ? e.value : e.value.toString()
+              );
+            }}
             width="150"
           />
         </FilterWrapper>
       </FilterContainer>
       <TableHeader />
       {data.leaderboard_pitching.leaderboard_pitching.map(
-        (item: any, index: string) => {
-          return (
-            <TableRow
-              playerData={item}
-              rank={(+index + 1).toString()}
-              key={index}
-            />
-          );
+        (item: PitchingDataType, index: number) => {
+          return <TableRow playerData={item} rank={++index} key={index} />;
         }
       )}
     </TabContainer>

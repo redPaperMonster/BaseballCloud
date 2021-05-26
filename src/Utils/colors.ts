@@ -13,4 +13,6 @@ export enum colors {
   green = "#35c32a",
   red = "#f05f62",
   softLightBlue = "rgba(72, 187, 255, 0.1)",
+  lightGreen = "#60bb71",
+  darkGreen = "#3e914d",
 }

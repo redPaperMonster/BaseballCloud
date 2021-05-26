@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 const queries = {
-  userList: gql`
+  getUserList: gql`
     query Profiles($input: FilterProfilesInput!) {
       profiles(input: $input) {
         profiles {

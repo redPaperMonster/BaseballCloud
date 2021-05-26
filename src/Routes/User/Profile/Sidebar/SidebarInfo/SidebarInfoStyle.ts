@@ -76,15 +76,14 @@ export const BioText = styled.div`
 
 export const FormTitle = styled.div`
   text-align: center;
-  color: #667784;
   font-size: 18px;
   font-weight: 900;
-  color: #414f5a;
+  color: ${colors.lightBlack};
   text-align: left;
   display: inline-block;
   position: relative;
   z-index: 1;
-  background-color: #ffffff;
+  background-color: ${colors.white};
   padding-right: 12px;
 `;
 export const TitleWrapper = styled.div`

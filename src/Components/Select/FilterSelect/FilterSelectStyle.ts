@@ -21,8 +21,6 @@ export const SelectElement = styled(CreatableSelect)<FilterSelectStyleProps>`
     }
     box-shadow: none;
   }
-  .react-select__indicators {
-  }
   .react-select__option {
     &:hover {
       background-color: ${colors.softLightBlue};
@@ -42,10 +40,7 @@ export const SelectElement = styled(CreatableSelect)<FilterSelectStyleProps>`
   .react-select__indicator-separator {
     display: none;
   }
-  .react-select__value {
-  }
-  .react-select__value-container {
-  }
+
   .react-select__placeholder {
     color: ${colors.lightBlue};
   }

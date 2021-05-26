@@ -1,7 +1,8 @@
 import mapValues from "lodash.mapvalues";
+import { UserDataType } from "../Store";
 
-export const transformData = (data: any) => {
-  return mapValues(data, (i: any) => {
+export const transformData = (data: UserDataType) => {
+  return mapValues(data, (i: string | any) => {
     return i !== data.avatar &&
       i !== data.biography &&
       i !== data.first_name &&

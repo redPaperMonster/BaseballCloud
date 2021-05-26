@@ -2,17 +2,20 @@ import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
 import ReactPaginate from "react-paginate";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { match } from "react-router-dom";
 import { BoldArrowIcon, SearchIcon } from "../../../Assets/icons";
 import {
   FilterInput,
   FilterSelect,
-  FindInput,
+  SearchInput,
   LoaderWrapper,
   StyledToast,
 } from "../../../Components";
-import { playerSelector } from "../../../Store";
+import { PlayerDataType } from "../../../Store";
 import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
+import { MatchProps, SelectOptionType } from "../../../Utils";
+import { filterPositionOptions, perPageOptions } from "../../../Utils/options";
 import TableHeader from "./Components/Table/TableHeader";
 import TableRow from "./Components/Table/TableRow";
 import {
@@ -29,30 +32,23 @@ import {
 } from "./NetworkStyle";
 import "./pagination.css";
 import { queries } from "./Schemas";
+
 interface NetworkProps {
-  match?: any;
+  match?: match<MatchProps>;
 }
 const Network: React.FC<NetworkProps> = ({ match }) => {
-  const [perPage, setPerPage] = useState(10);
-  const [offset, setOffset] = useState(0);
-  const [pagesCount, setPagesCount] = useState(0);
+  const [perPage, setPerPage] = useState<number>(10);
+  const [offset, setOffset] = useState<number>(0);
+  const [pagesCount, setPagesCount] = useState<number>(0);
   const dispatch = useDispatch();
 
-  const perPageOptions = [
-    { value: 10, label: "10" },
-    { value: 25, label: "25" },
-    { value: 50, label: "50" },
-  ];
-  const positionOptions = [
-    { value: "All", label: "All" },
-    { value: "Catcher", label: "Catcher" },
-  ];
-  const [playerData, setPlayerData] = useState<any>();
+  const [playerData, setPlayerData] = useState<PlayerDataType[]>();
   const [teamFilter, setTeamFilter] = useState<string>("");
   const [schoolFilter, setSchoolFilter] = useState<string>("");
+  const [positionFilter, setPositionFilter] = useState<string>("");
   const [playerNameFilter, setPlayerNameFilter] = useState<string>("");
 
-  const { loading, error, data } = useQuery(queries.userList, {
+  const { loading, error, data } = useQuery(queries.getUserList, {
     variables: {
       input: {
         offset: offset,
@@ -60,36 +56,27 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
         school: schoolFilter,
         team: teamFilter,
         player_name: playerNameFilter,
+        position: positionFilter,
       },
     },
   });
 
-  const handleSetOption = (e: any) => {
-    setPerPage(e.value);
-  };
-  const players = useSelector(
-    playerSelector.getPlayersByOffset(
-      offset,
-      perPage,
-      schoolFilter,
-      teamFilter,
-      playerNameFilter
-    )
-  );
   useEffect(() => {
     if (!loading) {
-      dispatch(playerActions.setData(data.profiles.profiles));
       setPagesCount(data.profiles.total_count / perPage);
 
       if (data) {
+        dispatch(playerActions.setData(data.profiles.profiles));
         setPlayerData(data.profiles.profiles);
       }
-      if (players.length !== 0) {
-        setPlayerData(players);
-      }
     }
-  }, [data, schoolFilter]);
-
+  }, [data, schoolFilter, teamFilter, playerNameFilter]);
+  const handleSetOption = (e: SelectOptionType) => {
+    setPerPage(typeof e.value === "number" ? e.value : 10);
+  };
+  const handleSetPosition = (e: SelectOptionType) => {
+    setPositionFilter(e.value.toString());
+  };
   if (!playerData) {
     return (
       <LoaderWrapper fullWidth>
@@ -121,8 +108,9 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
               />
             </FilterWrapper>
             <FilterSelect
-              options={positionOptions}
-              onInputChange={() => {}}
+              options={filterPositionOptions}
+              onInputChange={handleSetPosition}
+              width="120"
               placeholder="Position"
             />
             <FilterSelect
@@ -139,7 +127,7 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
             Available Players ({loading ? "..." : data.profiles.total_count})
           </PlayersCount>
           <PlayerInputWrapper>
-            <FindInput
+            <SearchInput
               placeholder="Player Name"
               onChange={setPlayerNameFilter}
             />
@@ -153,7 +141,7 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
           </LoaderWrapper>
         ) : (
           <TableContainer>
-            {playerData.map((i: any) => {
+            {playerData.map((i: PlayerDataType) => {
               return <TableRow playerData={i} key={i.id} />;
             })}
           </TableContainer>
@@ -173,7 +161,6 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
         />
       </NetworkWrapper>
       <StyledToast>
-        <div>wow</div>
         <SearchIcon />
       </StyledToast>
     </NetworkContainer>

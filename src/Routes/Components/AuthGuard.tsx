@@ -12,13 +12,28 @@ function authGuard<T extends RouteComponentProps = RouteComponentProps>(
     const {
       match: { url },
     } = props;
-
-    if (!Component)
+    if (!Component) {
       return <Redirect to={token ? UserPaths.profile : AuthPaths.login} />;
-    if (url !== AuthPaths.login && !token)
+    }
+    if (
+      !(
+        url === AuthPaths.login ||
+        url === AuthPaths.registration ||
+        url === AuthPaths.forgotPassword
+      ) &&
+      !token
+    ) {
       return <Redirect to={AuthPaths.login} />;
-    if (url === AuthPaths.login && token)
+    }
+    if (
+      (url === AuthPaths.login ||
+        url === AuthPaths.registration ||
+        url === AuthPaths.forgotPassword) &&
+      token
+    ) {
       return <Redirect to={UserPaths.profile} />;
+    }
+
     return <Component {...props} />;
   };
   const componentName = Component && (Component.displayName || Component.name);

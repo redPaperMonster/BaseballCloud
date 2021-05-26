@@ -14,6 +14,7 @@ import { DropdownMenu } from "..";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../../Store";
 import { useLocation } from "react-router-dom";
+import image from "../../../Assets/img/UserAvatar.png";
 interface HeaderProps {
   isAuthorized?: boolean;
   avatarUrl?: string;
@@ -50,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
           </NavWrapper>
           <NavMenu>
             <Link to={UserPaths.profile}>
-              <UserImage url={userData.avatar} />
+              <UserImage url={userData.avatar || image} />
             </Link>
             <DropdownMenu
               userName={`${userData.first_name || "Profile"} ${

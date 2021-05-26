@@ -16,11 +16,11 @@ const NetworkTableHeader: React.FC<TableHeaderProps> = ({}) => {
   return (
     <TableHeaderContainer>
       <TableHeaderItemWrapper>
-        <TableHeaderItem width="14">Player name</TableHeaderItem>
-        <TableHeaderItem width="5">Sessions</TableHeaderItem>
-        <TableHeaderItem width="10">School</TableHeaderItem>
-        <TableHeaderItem width="10">Teams</TableHeaderItem>
-        <TableHeaderItem width="5">Age</TableHeaderItem>
+        <TableHeaderItem width="23">Player name</TableHeaderItem>
+        <TableHeaderItem width="13">Sessions</TableHeaderItem>
+        <TableHeaderItem width="19">School</TableHeaderItem>
+        <TableHeaderItem width="19">Teams</TableHeaderItem>
+        <TableHeaderItem width="13">Age</TableHeaderItem>
         <TableHeaderItem width="5">Favorite</TableHeaderItem>
       </TableHeaderItemWrapper>
     </TableHeaderContainer>

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import SidebarForm from "./SidebarForm/SidebarForm";
 import SidebarInfo from "./SidebarInfo/SidebarInfo";
 import "react-toastify/dist/ReactToastify.css";
-import { StyledToast } from "../../../../Components";
 import { userSelector } from "../../../../Store";
 import { useSelector } from "react-redux";
 import { hasEmptyValues } from "./Utils/hasEmptyValues";
 import _ from "lodash";
+import SidebarFormContainer from "./SidebarForm/SidebarFormContainer";
 interface SidebarProps {
-  params?: any;
+  params?: { id: string };
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ params }) => {
   const [isFormShow, setFormShow] = useState(false);
   const requiredUserData = useSelector(userSelector.getUserRequiredData());
+  const token = useSelector(userSelector.getToken());
 
   const handleShowForm = () => {
     setFormShow(!isFormShow);
@@ -28,19 +28,22 @@ const Sidebar: React.FC<SidebarProps> = ({ params }) => {
   }
 
   if (hasEmptyValues(requiredUserData)) {
-    return <SidebarForm setFormShow={handleShowForm} />;
+    return <SidebarFormContainer setFormShow={handleShowForm} />;
   }
-  return isFormShow ? (
-    <SidebarForm setFormShow={handleShowForm} />
-  ) : (
-    <div>
-      <SidebarInfo
-        setFormShow={handleShowForm}
-        isPlayerProfile
-        params={params}
-      />
-    </div>
-  );
+  if (token) {
+    return isFormShow ? (
+      <SidebarFormContainer setFormShow={handleShowForm} />
+    ) : (
+      <div>
+        <SidebarInfo
+          setFormShow={handleShowForm}
+          isPlayerProfile
+          params={params}
+        />
+      </div>
+    );
+  }
+  return null;
 };
 
 export default Sidebar;

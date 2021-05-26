@@ -9,7 +9,7 @@ import {
 export interface PersonalInfoProps {
   icon: ReactNode;
   text: string;
-  value: string;
+  value: number | string | undefined;
 }
 
 const PersonalInfoItem: React.FC<PersonalInfoProps> = ({
@@ -21,7 +21,7 @@ const PersonalInfoItem: React.FC<PersonalInfoProps> = ({
     <ItemContainer>
       <IconWrapper>{icon}</IconWrapper>
       <TextWrapper>{text}</TextWrapper>
-      <ValueWrapper>{value}</ValueWrapper>
+      <ValueWrapper>{value && value.toString()}</ValueWrapper>
     </ItemContainer>
   );
 };

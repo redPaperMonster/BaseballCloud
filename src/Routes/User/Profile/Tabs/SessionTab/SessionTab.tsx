@@ -15,7 +15,7 @@ import {
   ClearFiltersButton,
 } from "./SessionTabStyle";
 import "react-datepicker/dist/react-datepicker.css";
-import { DatePickerCustomInput } from "./Components";
+import { DatePickerInput } from "./Components";
 import dayjs from "dayjs";
 import { useQuery } from "@apollo/client";
 import { queries } from "../../Schemas";
@@ -23,7 +23,6 @@ import { useSelector } from "react-redux";
 import { userSelector } from "../../../../../Store";
 import { LoaderWrapper } from "../../../../../Components";
 import Loader from "react-loader-spinner";
-dayjs().format();
 function SessionTab() {
   const [date, setDate] = useState<any>();
   let userId = useSelector(userSelector.getUserId());
@@ -38,14 +37,6 @@ function SessionTab() {
       },
     },
   });
-
-  if (loading) {
-    return (
-      <LoaderWrapper>
-        <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
-      </LoaderWrapper>
-    );
-  }
   return (
     <TabContainer>
       <SessionHeader>
@@ -60,7 +51,7 @@ function SessionTab() {
             selected={date}
             onChange={(date) => setDate(date)}
             popperClassName="date_picker full-width"
-            customInput={<DatePickerCustomInput />}
+            customInput={<DatePickerInput />}
           />
         </FilterWrapper>
       </SessionHeader>
@@ -71,7 +62,13 @@ function SessionTab() {
           <TableHeader>Name</TableHeader>
           <TableLastHeader>Purchased</TableLastHeader>
         </TableHeadersWrapper>
-        <TableItems>The player haven't had any sessions yet!</TableItems>
+        {loading ? (
+          <LoaderWrapper isChild>
+            <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+          </LoaderWrapper>
+        ) : (
+          <TableItems>The player haven't had any sessions yet!</TableItems>
+        )}
       </SessionTable>
     </TabContainer>
   );

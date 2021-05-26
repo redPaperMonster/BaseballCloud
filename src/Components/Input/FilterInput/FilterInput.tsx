@@ -2,11 +2,11 @@ import * as React from "react";
 import { InputWrapper, Input, IconWrapper, Wrapper } from "./FilterInputStyle";
 import { Dispatch, SetStateAction, useState } from "react";
 interface FilterInputProps {
-  placeholder?: string;
   icon: JSX.Element;
-  handleFocus?: boolean;
-  width?: string;
   onChange: Dispatch<SetStateAction<string>>;
+  placeholder?: string;
+  width?: string;
+  handleFocus?: boolean;
   onFocus?: () => void;
   value?: string;
 }

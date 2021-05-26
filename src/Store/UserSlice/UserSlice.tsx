@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { UserDataType } from "./types";
 
-const initialState = {
+const initialState: UserDataType = {
   token: "",
   id: "",
   first_name: "",
@@ -33,8 +34,7 @@ export const userSlice = createSlice({
       return { ...state, ...action.payload };
     },
     resetStore: (state) => {
-      state = initialState;
-      return state;
+      return initialState;
     },
   },
 });

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../../Utils";
 
 export const LeaderBoardHeader = styled.div`
   padding: 16px;
@@ -11,11 +12,10 @@ export const HeaderText = styled.div`
   line-height: 1.25;
   font-weight: 400;
   text-align: center;
-  color: #667784;
+  color: ${colors.darkGray};
 `;
 export const FilterContainer = styled.div`
   width: 100%;
-
   position: relative;
   display: flex;
   justify-content: flex-end;

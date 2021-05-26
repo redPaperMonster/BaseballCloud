@@ -1,5 +1,6 @@
 import * as React from "react";
 import { FavoriteButton } from "../../../../../Components";
+import { PlayerDataType, TeamDataType } from "../../../../../Store";
 import { UserPaths } from "../../../../routes";
 import {
   RowContainer,
@@ -12,31 +13,32 @@ export interface TableRowStyleProps {
 }
 
 export type TableRowProps = {
-  playerData: any;
-  rank?: string;
+  playerData: PlayerDataType;
 };
-const NetworkTableRow: React.FC<TableRowProps> = ({ playerData, rank }) => {
+const NetworkTableRow: React.FC<TableRowProps> = ({ playerData }) => {
   return (
     <RowContainer>
       <TableNetworkCellLink
-        width="14"
+        width="23"
         to={`${UserPaths.profile}/${playerData.id}`}
       >{`${playerData.first_name} ${playerData.last_name}`}</TableNetworkCellLink>
 
-      <TableNetworkCell width="5">-</TableNetworkCell>
-      <TableNetworkCell width="10">
+      <TableNetworkCell width="12">-</TableNetworkCell>
+      <TableNetworkCell width="17">
         {(playerData.school && playerData.school.name) || "-"}
       </TableNetworkCell>
 
-      <TableCell width="10">
+      <TableCell width="19">
         {(playerData.teams &&
-          playerData.teams.map((i: any) =>
-            i === playerData.teams.slice(-1)[0] ? i.name : `${i.name}, `
+          playerData.teams.map((i: TeamDataType) =>
+            i === playerData.teams.slice(-1).find(() => true)
+              ? i.name
+              : `${i.name}, `
           )) ||
           "-"}
       </TableCell>
 
-      <TableNetworkCell width="5">{playerData.age}</TableNetworkCell>
+      <TableNetworkCell width="13">{playerData.age}</TableNetworkCell>
       <TableCell width="5">
         <FavoriteButton isFavorite={playerData.favorite} id={playerData.id} />
       </TableCell>

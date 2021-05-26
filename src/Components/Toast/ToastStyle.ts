@@ -4,15 +4,14 @@ import { colors } from "../../Utils";
 
 export const StyledToast = styled(ToastContainer).attrs({})`
   .Toastify__toast-container {
-    background-color: #60bb71 !important;
+    background-color: ${colors.lightGreen} !important;
   }
   .Toastify__toast {
-    background-color: #60bb71 !important;
-
+    background-color: ${colors.lightGreen} !important;
     color: ${colors.white};
   }
   .Toastify__progress-bar {
-    background-color: #3e914d;
+    background-color: ${colors.darkGreen};
     color: ${colors.white} !important;
   }
 `;

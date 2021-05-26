@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { colors } from "../../../Utils/colors";
 import { Link } from "react-router-dom";
 
-export const FormContainer = styled.div``;
 export const Title = styled.div`
   font-size: 24px;
   line-height: 1.25;
