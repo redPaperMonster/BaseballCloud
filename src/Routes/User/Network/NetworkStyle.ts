@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../../Utils/colors";
+import { LoaderProps } from "./Network";
 
 export const TableContainer = styled.div`
   display: flex;
@@ -42,6 +43,13 @@ export const PlayersCount = styled.div`
   text-align: left;
 `;
 export const PlayerInputWrapper = styled.div``;
+
+export const LoaderContainer = styled.div<LoaderProps>`
+  height: ${(props) =>
+    props.perPage === 10 ? `${props.perPage * 50}px;` : "100vh;"};
+  display: flex;
+  justify-content: center;
+`;
 
 export const FilterWrapper = styled.div`
   margin-left: 15px;

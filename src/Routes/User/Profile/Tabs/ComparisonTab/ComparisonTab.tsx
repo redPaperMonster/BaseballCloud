@@ -2,8 +2,11 @@ import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { SearchIcon } from "../../../../../Assets/icons";
-import { FilterInput } from "../../../../../Components";
-import useComponentOpened from "../../../../../Layouts/Components/Dropdown/useComponentOpened";
+import {
+  FilterInput,
+  LoaderWrapper,
+  useComponentOpened,
+} from "../../../../../Components";
 import { PlayerDataType, userSelector } from "../../../../../Store";
 import { queries } from "../../Schemas";
 import {
@@ -24,20 +27,37 @@ import Loader from "react-loader-spinner";
 export type ComparisonStyleProps = {
   url: string;
 };
+interface ComparisonTabProps {
+  playerId?: string;
+}
 
-const ComparisonTab: React.FC = () => {
-  const userData = useSelector(userSelector.getUserData());
-  const userPosition = useSelector(userSelector.getPosition());
-  const { ref, isOpened, setIsOpened } = useComponentOpened(false);
-  const [playerName, setPlayerName] = useState<string>("");
+const ComparisonTab: React.FC<ComparisonTabProps> = ({ playerId }) => {
   const [currentPlayer, setCurrentPlayer] = useState<PlayerDataType>();
-  const { loading, data } = useQuery(queries.getPlayerAvatar, {
+  const [playerName, setPlayerName] = useState<string>("");
+
+  const userId = useSelector(userSelector.getUserId());
+  const { ref, isOpened, setIsOpened } = useComponentOpened(false);
+  const { loading, data } = useQuery(queries.getPlayerProfile, {
+    variables: { id: playerId || userId },
+  });
+
+  const playerAvatar = useQuery(queries.getPlayerAvatar, {
     variables: currentPlayer
       ? {
           id: currentPlayer.id,
         }
       : {},
   });
+
+  if (loading) {
+    return (
+      <TabContainer>
+        <LoaderWrapper isChild>
+          <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
+        </LoaderWrapper>
+      </TabContainer>
+    );
+  }
   const setHeight = () => {
     if (currentPlayer) {
       return `${currentPlayer.feet} ft ${currentPlayer.inches || 0} in `;
@@ -47,14 +67,18 @@ const ComparisonTab: React.FC = () => {
     <TabContainer>
       <ComparisonHeader>
         <UserSection>
-          <UserAvatar url={userData.avatar || image} />
-          <UserName>{`${userData.first_name} ${userData.last_name}`}</UserName>
+          <UserAvatar url={data.profile.avatar || image} />
+          <UserName>{`${data.profile.first_name} ${data.profile.last_name}`}</UserName>
         </UserSection>
         <PlayerSection>
           {loading ? (
             <Loader type="TailSpin" color="#00BFFF" height={30} width={30} />
           ) : (
-            <PlayerAvatar url={(data && data.profile.avatar) || image} />
+            <PlayerAvatar
+              url={
+                (playerAvatar.data && playerAvatar.data.profile.avatar) || image
+              }
+            />
           )}
           <div ref={ref}>
             <FilterInput
@@ -69,10 +93,10 @@ const ComparisonTab: React.FC = () => {
               }}
               value={playerName}
             />
-            {playerName && isOpened && (
+            {playerName && (
               <SearchDropdown
                 playerName={playerName}
-                userPosition={userPosition}
+                userPosition={data.profile.position}
                 isOpened={isOpened}
                 setIsOpened={setIsOpened}
                 setCurrentPlayer={setCurrentPlayer}
@@ -84,19 +108,21 @@ const ComparisonTab: React.FC = () => {
       </ComparisonHeader>
       <ComparisonTable>
         <ComparisonTableRow>
-          <ComparisonTableCell>Age: {userData.age}</ComparisonTableCell>
+          <ComparisonTableCell>Age: {data.profile.age}</ComparisonTableCell>
           <ComparisonTableCell>
             Age: {(currentPlayer && currentPlayer.age) || "-"}
           </ComparisonTableCell>
         </ComparisonTableRow>
         <ComparisonTableRow>
           <ComparisonTableCell>
-            Height: {userData.feet} ft {userData.inches || "0"} in
+            Height: {data.profile.feet} ft {data.profile.inches || "0"} in
           </ComparisonTableCell>
           <ComparisonTableCell>Height: {setHeight()}</ComparisonTableCell>
         </ComparisonTableRow>
         <ComparisonTableRow>
-          <ComparisonTableCell>Weight: {userData.weight}</ComparisonTableCell>
+          <ComparisonTableCell>
+            Weight: {data.profile.weight}
+          </ComparisonTableCell>
           <ComparisonTableCell>
             Weight: {(currentPlayer && currentPlayer.weight) || "-"}
           </ComparisonTableCell>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AgeIcon,
   BatsIcon,
@@ -10,7 +10,6 @@ import {
 } from "../../../../../Assets/icons";
 import {
   PlayerDataType,
-  playerSelector,
   UserDataType,
   userSelector,
 } from "../../../../../Store";
@@ -34,49 +33,87 @@ import {
 } from "./SidebarInfoStyle";
 import SchoolInfoItem from "./Components/SchoolInfoItem/SchoolInfoItem";
 import SidebarFavoriteButton from "./Components/SidebarFavoriteButton/SidebarFavoriteButton";
-import { useQuery } from "@apollo/client";
-import { queries } from "../../Schemas";
-import { StyledToast, LoaderWrapper } from "../../../../../Components";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { mutations, queries } from "../../Schemas";
+import {
+  StyledToast,
+  LoaderWrapper,
+  ToastBody,
+} from "../../../../../Components";
 import Loader from "react-loader-spinner";
 import image from "../../../../../Assets/img/UserAvatar.png";
 import {
   FacilityDataType,
   TeamDataType,
 } from "../../../../../Store/UserSlice/types";
+import { toast } from "react-toastify";
+import { playerActions } from "../../../../../Store/PlayersSlice/PlayerSlice";
 interface SidebarInfoProps {
-  setFormShow?: () => void;
-  isPlayerProfile?: boolean;
-  params?: { id: string };
+  setFormShow: React.Dispatch<React.SetStateAction<boolean>>;
+  params: { id: string } | undefined;
 }
 
 export interface SidebarInfoStyleProps {
   url: string;
 }
 
-const SidebarInfo: React.FC<SidebarInfoProps> = ({
-  setFormShow,
-  params = { id: "" },
-}) => {
-  let user: UserDataType = useSelector(userSelector.getUserData());
-  let player: PlayerDataType | undefined = useSelector(
-    playerSelector.getPlayerById(params.id)
-  );
-  const { loading, data } = useQuery(queries.getPlayerProfile, {
-    variables: { id: (params && params.id) || user.id },
-  });
+const SidebarInfo: React.FC<SidebarInfoProps> = ({ setFormShow, params }) => {
   const [playerData, setPlayerData] = useState<UserDataType | PlayerDataType>();
-  useEffect(() => {
-    if (!loading) {
-      if (player) {
-        setPlayerData(transformData(player));
-      } else if (params.id && data) {
-        setPlayerData(transformData(data.profile));
-      } else {
-        setPlayerData(transformData(user));
-      }
+  let user: UserDataType = useSelector(userSelector.getUserData());
+
+  const [getPlayer, { data, loading, refetch, previousData }] = useLazyQuery(
+    queries.getPlayerProfile,
+    {
+      variables: { id: (params && params?.id) || user.id },
     }
-  }, [data, player, user]);
-  if (loading) {
+  );
+  const [updateFavorite, ff] = useMutation(mutations.updateFavorite);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (params?.id && !playerData && !data) {
+      getPlayer();
+    }
+    if (params?.id && !playerData && data) {
+      setPlayerData(transformData(data.profile));
+    }
+    if (params?.id && playerData && data !== previousData) {
+      setPlayerData(transformData(data.profile));
+    }
+    if (!params?.id) {
+      setPlayerData(transformData(user));
+    }
+  }, [data?.profile, user]);
+  const handleFavoriteClick = () => {
+    updateFavorite({
+      variables: {
+        form: {
+          favorite: !(playerData as PlayerDataType).favorite,
+          profile_id: playerData?.id,
+        },
+      },
+    }).then((data) => {
+      getPlayer();
+
+      toast.success(() => (
+        <ToastBody
+          text={
+            (playerData as PlayerDataType).favorite
+              ? "This profile removed from favorite list successfully!"
+              : "This profile added to favorite list successfully!"
+          }
+        />
+      ));
+
+      dispatch(
+        playerActions.updateFavorite({
+          id: playerData?.id,
+          favorite: data.data.update_favorite_profile.favorite,
+        })
+      );
+    });
+  };
+  if (loading && !playerData) {
     return (
       <LoaderWrapper>
         <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
@@ -91,11 +128,11 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({
         <EditButtonWrapper>
           {params && params.id ? (
             <SidebarFavoriteButton
+              handleClick={handleFavoriteClick}
               isFavorite={(playerData as PlayerDataType).favorite || false}
-              id={playerData.id}
             />
           ) : (
-            <EditButton onClick={setFormShow}>
+            <EditButton onClick={() => setFormShow(true)}>
               <EditIcon />
             </EditButton>
           )}
@@ -118,7 +155,7 @@ const SidebarInfo: React.FC<SidebarInfoProps> = ({
         <PersonalInfoItem
           icon={<HeightIcon />}
           text="Height"
-          value={`${playerData.feet} ft ${playerData.inches} in`}
+          value={`${playerData.feet} ft ${playerData.inches || 0} in`}
         />
         <PersonalInfoItem
           icon={<WeightIcon />}

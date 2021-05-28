@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
 import ReactPaginate from "react-paginate";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { match } from "react-router-dom";
 import { BoldArrowIcon, SearchIcon } from "../../../Assets/icons";
 import {
@@ -12,7 +12,7 @@ import {
   LoaderWrapper,
   StyledToast,
 } from "../../../Components";
-import { PlayerDataType } from "../../../Store";
+import { PlayerDataType, playerSelector } from "../../../Store";
 import { playerActions } from "../../../Store/PlayersSlice/PlayerSlice";
 import { MatchProps, SelectOptionType } from "../../../Utils";
 import { filterPositionOptions, perPageOptions } from "../../../Utils/options";
@@ -20,6 +20,7 @@ import TableHeader from "./Components/Table/TableHeader";
 import TableRow from "./Components/Table/TableRow";
 import {
   FilterWrapper,
+  LoaderContainer,
   NetworkContainer,
   NetworkFiltersWrapper,
   NetworkHeader,
@@ -36,6 +37,17 @@ import { queries } from "./Schemas";
 interface NetworkProps {
   match?: match<MatchProps>;
 }
+interface QueryInput {
+  offset: number;
+  profiles_count: number;
+  team?: string;
+  player_name?: string;
+  position?: string;
+  school?: string;
+}
+export interface LoaderProps {
+  perPage: number;
+}
 const Network: React.FC<NetworkProps> = ({ match }) => {
   const [perPage, setPerPage] = useState<number>(10);
   const [offset, setOffset] = useState<number>(0);
@@ -48,19 +60,31 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
   const [positionFilter, setPositionFilter] = useState<string>("");
   const [playerNameFilter, setPlayerNameFilter] = useState<string>("");
 
-  const { loading, error, data } = useQuery(queries.getUserList, {
+  const setVariables = () => {
+    let input: QueryInput = {
+      offset: offset,
+      profiles_count: perPage,
+    };
+    if (teamFilter) {
+      input.team = teamFilter;
+    }
+    if (schoolFilter) {
+      input.school = schoolFilter;
+    }
+    if (playerNameFilter) {
+      input.player_name = playerNameFilter;
+    }
+    if (positionFilter) {
+      input.position = positionFilter;
+    }
+    return input;
+  };
+
+  const { loading, data, refetch } = useQuery(queries.getUserList, {
     variables: {
-      input: {
-        offset: offset,
-        profiles_count: perPage,
-        school: schoolFilter,
-        team: teamFilter,
-        player_name: playerNameFilter,
-        position: positionFilter,
-      },
+      input: { ...setVariables() },
     },
   });
-
   useEffect(() => {
     if (!loading) {
       setPagesCount(data.profiles.total_count / perPage);
@@ -136,13 +160,20 @@ const Network: React.FC<NetworkProps> = ({ match }) => {
         <TableHeader />
 
         {loading ? (
-          <LoaderWrapper isChild>
-            <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />
-          </LoaderWrapper>
+          <LoaderContainer perPage={perPage}>
+            <LoaderWrapper isChild>
+              <Loader
+                type="ThreeDots"
+                color="#00BFFF"
+                height={100}
+                width={100}
+              />
+            </LoaderWrapper>
+          </LoaderContainer>
         ) : (
           <TableContainer>
             {playerData.map((i: PlayerDataType) => {
-              return <TableRow playerData={i} key={i.id} />;
+              return <TableRow playerData={i} key={i.id} refetch={refetch} />;
             })}
           </TableContainer>
         )}

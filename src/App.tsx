@@ -1,46 +1,16 @@
 import "./App.css";
 import React from "react";
-import {
-  ApolloClient,
-  ApolloProvider,
-  createHttpLink,
-  DefaultOptions,
-  InMemoryCache,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { MainRoute } from "./Routes";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./Store/store";
 import { BrowserRouter as Router } from "react-router-dom";
+import { apolloLink, defaultOptions } from "./Utils/apolloConfig";
 
-const httpLink = createHttpLink({
-  uri: `https://baseballcloud-back.herokuapp.com/api/v1/graphql`,
-});
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
-  const client = localStorage.getItem("client");
-  const uid = localStorage.getItem("uid");
-  return {
-    headers: {
-      ...headers,
-      "access-token": token || "",
-      client: client || "",
-      uid: uid || "",
-    },
-  };
-});
-const defaultOptions: DefaultOptions = {
-  watchQuery: {
-    fetchPolicy: "no-cache",
-  },
-  query: {
-    fetchPolicy: "no-cache",
-  },
-};
 const createApolloClient = () => {
   return new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: apolloLink,
     cache: new InMemoryCache({
       addTypename: false,
     }),

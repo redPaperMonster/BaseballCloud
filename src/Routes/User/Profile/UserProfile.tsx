@@ -1,10 +1,10 @@
-import { useQuery } from "@apollo/client";
-import React from "react";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import React, { useEffect } from "react";
 import Loader from "react-loader-spinner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { match } from "react-router-dom";
 import { LoaderWrapper } from "../../../Components";
-import { userSelector } from "../../../Store";
+import { userActions, userSelector } from "../../../Store";
 import { MatchProps } from "../../../Utils";
 import ProgressItem from "./Components/ProgressItem/ProgressItem";
 import { queries } from "./Schemas";
@@ -24,10 +24,18 @@ interface UserProfileProps {
 }
 const UserProfile: React.FC<UserProfileProps> = ({ match }) => {
   let userId = useSelector(userSelector.getUserId());
-  const { loading, data } = useQuery(queries.getBattingSummary, {
+  const [getBatting, batting] = useLazyQuery(queries.getBattingSummary, {
     variables: { id: (match?.params && match?.params?.id) || userId },
   });
+  const { loading, error, data } = useQuery(queries.getCurrentProfile);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (data?.current_profile) {
+      getBatting();
+      dispatch(userActions.setData(data.current_profile));
+    }
+  }, [data?.current_profile]);
   if (loading) {
     return (
       <LoaderWrapper>
@@ -69,7 +77,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ match }) => {
         </RecentEventsSection>
       </SummaryEventsWrapper>
       <TabsSection>
-        <ProfileTabs />
+        <ProfileTabs match={match} />
       </TabsSection>
     </div>
   );

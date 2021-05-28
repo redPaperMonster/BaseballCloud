@@ -19,7 +19,7 @@ export const validation = {
       if (+value > 30) {
         return "Must not be older than 30";
       }
-      return +value !== 0 ? undefined : "Required";
+      return value && +value !== 0 ? undefined : "Required";
     }
     return "Required";
   },
@@ -31,7 +31,7 @@ export const validation = {
       if (+value < 4) {
         return "Minimal height is 4";
       }
-      return +value !== 0 ? undefined : "Required";
+      return value && +value !== 0 ? undefined : "Required";
     }
     return "Required";
   },
@@ -43,7 +43,7 @@ export const validation = {
       if (+value < 50) {
         return "Minimal weight is 50 lbs";
       }
-      return +value !== 0 ? undefined : "Required";
+      return value && +value !== 0 ? undefined : "Required";
     }
     return "Required";
   },
@@ -64,6 +64,15 @@ export const validation = {
     }
     return "Required!";
   },
+  // passwordValidation: (value: string) => {
+  //   if (typeof value === "string") {
+  //     if (value.length < 8) {
+  //       return "Must contain more than 8 characters";
+  //     }
+  //     return undefined;
+  //   }
+  //   return "Required!";
+  // },
   sidebarFormValidation: (values: UserDataType) => {
     const {
       first_name,

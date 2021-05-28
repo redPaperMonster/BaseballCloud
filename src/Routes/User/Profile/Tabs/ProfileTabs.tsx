@@ -1,21 +1,26 @@
 import React, { useState } from "react";
-import { TabButton } from "../../../../Components";
+import { Dropdown, TabButton } from "../../../../Components";
 import BattingTab from "./SummaryTab/SummaryTab";
 import ComparisonTab from "./ComparisonTab/ComparisonTab";
 import {
   DropdownContainer,
   DropdownItem,
-  DropdownPanel,
   TabList,
   TabPanel,
 } from "./ProfileTabStyle";
 import SessionTab from "./SessionTab/SessionTab";
 import ChartTab from "./ChartTab/ChartTab";
 import LogTab from "./LogTab/LogTab";
+import { match } from "react-router-dom";
+import { MatchProps } from "../../../../Utils";
 
 export interface DropdownStyleProps {
-  isDropdownOpen: boolean;
+  isDropdownOpened: boolean;
 }
+interface ProfileTabsProps {
+  match?: match<MatchProps>;
+}
+
 enum tabs {
   summary,
   session,
@@ -24,9 +29,9 @@ enum tabs {
   log,
 }
 
-function ProfileTabs() {
+const ProfileTabs: React.FC<ProfileTabsProps> = ({ match }) => {
   const [currentTab, setCurrentTab] = useState(tabs.summary);
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isDropdownOpened, setDropdownOpen] = useState(false);
 
   const handleChangeTab = () => {
     switch (currentTab) {
@@ -35,7 +40,7 @@ function ProfileTabs() {
       case tabs.session:
         return <SessionTab />;
       case tabs.comparison:
-        return <ComparisonTab />;
+        return <ComparisonTab playerId={match?.params && match?.params?.id} />;
       case tabs.charts:
         return <ChartTab />;
       case tabs.log:
@@ -57,7 +62,7 @@ function ProfileTabs() {
           onMouseOut={() => setDropdownOpen(false)}
         >
           <DropdownContainer>
-            <DropdownPanel isDropdownOpen={isDropdownOpen}>
+            <Dropdown isOpened={isDropdownOpened}>
               <DropdownItem onClick={() => handleDropdownClick(tabs.summary)}>
                 Summary
               </DropdownItem>
@@ -67,15 +72,17 @@ function ProfileTabs() {
               <DropdownItem onClick={() => handleDropdownClick(tabs.log)}>
                 Log
               </DropdownItem>
-            </DropdownPanel>
+            </Dropdown>
           </DropdownContainer>
         </TabButton>
 
-        <TabButton
-          onClick={() => setCurrentTab(tabs.session)}
-          title="Session Reports"
-          isActive={currentTab === tabs.session}
-        />
+        {!(match?.params && match?.params?.id) && (
+          <TabButton
+            onClick={() => setCurrentTab(tabs.session)}
+            title="Session Reports"
+            isActive={currentTab === tabs.session}
+          />
+        )}
         <TabButton
           onClick={() => setCurrentTab(tabs.comparison)}
           title="Comparison"
@@ -86,6 +93,6 @@ function ProfileTabs() {
       <TabPanel>{handleChangeTab()}</TabPanel>
     </div>
   );
-}
+};
 
 export default ProfileTabs;

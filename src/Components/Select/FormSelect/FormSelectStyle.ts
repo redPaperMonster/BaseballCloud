@@ -50,3 +50,10 @@ export const SelectElement = styled(CreatableSelect)`
     background-color: ${colors.softLightBlue};
   }
 `;
+
+export const ErrorText = styled.div`
+  display: flex;
+  color: ${colors.red};
+  margin-top: 8px;
+  margin-bottom: 4px;
+`;

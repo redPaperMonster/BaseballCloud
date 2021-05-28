@@ -6,7 +6,7 @@ interface UserListLayoutProps {}
 const UserListLayout: React.FC<UserListLayoutProps> = ({ children }) => {
   return (
     <Main>
-      <Header isAuthorized />
+      <Header />
       <MainContent>{children}</MainContent>
       <Footer />
     </Main>

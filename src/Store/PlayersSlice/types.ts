@@ -15,4 +15,5 @@ export type PlayerDataType = {
   school_year: string;
   teams: TeamDataType[];
   weight: number;
+  avatar?: string;
 };

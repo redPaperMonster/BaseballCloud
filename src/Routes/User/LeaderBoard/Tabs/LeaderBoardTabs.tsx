@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TabButton } from "../../../../Components";
+import { StyledToast, TabButton } from "../../../../Components";
 import BattingTab from "./BattingTab/BattingTab";
 import { TabList, TabPanel } from "./LeaderBoardTabsStyle";
 import PitchingTab from "./PitchingTab/PitchingTab";
@@ -37,6 +37,7 @@ function LeaderBoardTabs() {
       </TabList>
 
       <TabPanel>{handleChangeTab()}</TabPanel>
+      <StyledToast />
     </div>
   );
 }

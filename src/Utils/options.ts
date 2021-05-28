@@ -1,7 +1,6 @@
 export type SelectOptionType = {
   value: string | number;
   label: string;
-  payload?: any;
 };
 
 export const pitchingLeadTypeOptions = [
@@ -36,7 +35,7 @@ export const schoolYearsOptions = [
   { value: "none", label: "None" },
 ];
 export const filterPositionOptions = [
-  { value: "all", label: "All" },
+  { value: "", label: "All" },
   ...positionOptions,
 ];
 export const battingLeadTypeOptions = [

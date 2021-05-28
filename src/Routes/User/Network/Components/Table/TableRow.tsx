@@ -1,7 +1,12 @@
+import { useMutation } from "@apollo/client";
 import * as React from "react";
-import { FavoriteButton } from "../../../../../Components";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { FavoriteButton, ToastBody } from "../../../../../Components";
 import { PlayerDataType, TeamDataType } from "../../../../../Store";
+import { playerActions } from "../../../../../Store/PlayersSlice/PlayerSlice";
 import { UserPaths } from "../../../../routes";
+import { mutations } from "../../../Profile/Schemas";
 import {
   RowContainer,
   TableCell,
@@ -14,8 +19,35 @@ export interface TableRowStyleProps {
 
 export type TableRowProps = {
   playerData: PlayerDataType;
+  refetch: () => void;
 };
-const NetworkTableRow: React.FC<TableRowProps> = ({ playerData }) => {
+const NetworkTableRow: React.FC<TableRowProps> = ({ playerData, refetch }) => {
+  const [updateFavorite] = useMutation(mutations.updateFavorite);
+  const dispatch = useDispatch();
+  const handleFavoriteClick = () => {
+    updateFavorite({
+      variables: {
+        form: { favorite: !playerData.favorite, profile_id: playerData.id },
+      },
+    }).then((data) => {
+      toast.success(() => (
+        <ToastBody
+          text={
+            playerData.favorite
+              ? "This profile removed from favorite list successfully!"
+              : "This profile added to favorite list successfully!"
+          }
+        />
+      ));
+      dispatch(
+        playerActions.updateFavorite({
+          id: playerData.id,
+          favorite: data.data.update_favorite_profile.favorite,
+        })
+      );
+      refetch();
+    });
+  };
   return (
     <RowContainer>
       <TableNetworkCellLink
@@ -40,7 +72,10 @@ const NetworkTableRow: React.FC<TableRowProps> = ({ playerData }) => {
 
       <TableNetworkCell width="13">{playerData.age}</TableNetworkCell>
       <TableCell width="5">
-        <FavoriteButton isFavorite={playerData.favorite} id={playerData.id} />
+        <FavoriteButton
+          isFavorite={playerData.favorite}
+          handleClick={handleFavoriteClick}
+        />
       </TableCell>
     </RowContainer>
   );

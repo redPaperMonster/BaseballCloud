@@ -24,7 +24,7 @@ import { userSelector } from "../../../../../Store";
 import { LoaderWrapper } from "../../../../../Components";
 import Loader from "react-loader-spinner";
 function SessionTab() {
-  const [date, setDate] = useState<any>();
+  const [date, setDate] = useState<string>();
   let userId = useSelector(userSelector.getUserId());
 
   const { loading, data } = useQuery(queries.getProfileEvents, {
@@ -42,14 +42,14 @@ function SessionTab() {
       <SessionHeader>
         <SessionTitle>Sessions</SessionTitle>
         <FilterWrapper>
-          <ClearFiltersButton onClick={() => setDate("")}>
+          <ClearFiltersButton onClick={() => setDate(dayjs().toString())}>
             Clear Filters
           </ClearFiltersButton>
           <DatePickerWrapperStyles />
           <DatePicker
             dateFormat="dd/MM/yyyy"
-            selected={date}
-            onChange={(date) => setDate(date)}
+            selected={dayjs(date).toDate()}
+            onChange={(date) => setDate(date?.toString())}
             popperClassName="date_picker full-width"
             customInput={<DatePickerInput />}
           />

@@ -16,7 +16,7 @@ interface ProfileLayoutProps {
 const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children, match }) => {
   return (
     <Main>
-      <Header isAuthorized />
+      <Header />
       <MainContent>
         <SidebarWrapper>
           <Sidebar params={match?.params} />

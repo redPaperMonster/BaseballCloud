@@ -2,7 +2,7 @@ import { ComponentType } from "react";
 import { Route } from "react-router-dom";
 
 export interface RouteWrapperProps {
-  Layout: React.FC<any>;
+  Layout: React.FC;
   Component: ComponentType<any>;
   path: string;
   exact?: boolean;

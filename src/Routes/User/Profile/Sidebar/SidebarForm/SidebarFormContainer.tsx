@@ -19,9 +19,11 @@ import {
   positionOptions,
   schoolYearsOptions,
 } from "../../../../../Utils/options";
+import _ from "lodash";
+import { filterData, setValuesToRequestData } from "../Utils/setDefaultOptions";
 
 interface SidebarFormProps {
-  setFormShow: () => void;
+  setFormShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface SidebarFormStyleProps {
@@ -31,13 +33,14 @@ export interface SidebarFormStyleProps {
 const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
   const [file, setFile] = useState<File>();
   const [url, setUrl] = useState<string>();
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>();
   const [userData, setUserData] = useState<UserDataType>();
   const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
-
+  const userId = useSelector(userSelector.getUserId());
   let { loading, data } = useQuery(queries.getCurrentProfile, {});
-  const profile = useSelector(userSelector.getUserData());
-  const [updateUser] = useMutation(mutations.updateUser);
+  const [updateUser, { loading: updateLoading }] = useMutation(
+    mutations.updateUser
+  );
   const schools = useQuery(queries.getSchools, {
     variables: { search: "" },
   });
@@ -50,15 +53,10 @@ const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!loading) {
-      if (profile) {
-        const { token, recent_events, _persist, ...newProfile } = profile;
-        setUserData(newProfile);
-      } else {
-        setUserData(data.current_profile);
-      }
+    if (data?.current_profile) {
+      setUserData(data?.current_profile);
     }
-  }, [data, profile]);
+  }, [data]);
 
   if (schools.loading || teams.loading || facilities.loading || loading) {
     return (
@@ -70,26 +68,39 @@ const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
 
   const schoolOptions = schools.data.schools.schools.map(
     (i: SchoolDataType) => {
-      return { value: i, label: i.name };
+      return { value: i.id, label: i.name };
     }
   );
   const teamsOptions = teams.data.teams.teams.map((i: TeamDataType) => {
-    return { value: i.name, label: i.name, payload: i };
+    return { value: i.id, label: i.name };
   });
   const facilitiesOptions = facilities.data.facilities.facilities.map(
     (i: FacilityDataType) => {
-      return { value: i.u_name, label: i.u_name, payload: i };
+      return { value: i.id, label: i.u_name };
     }
   );
 
   const handleSubmit = async (values: UserDataType) => {
-    setIsUpdating(true);
+    let filteredSchool = [];
+    const filteredTeams = filterData(teams.data.teams.teams, values.teams);
+    const filteredFacilities = filterData(
+      facilities.data.facilities.facilities,
+      values.facilities
+    );
+    if (values.school) {
+      filteredSchool = schools.data.schools.schools.filter(
+        (i: SchoolDataType) => i.id === (values as any).school
+      );
+    }
     await updateUser({
       variables: {
         form: {
-          ...values,
-          avatar: url || values.avatar,
-          biography: values.biography || " ",
+          id: userId,
+          ...setValuesToRequestData(values),
+          avatar: url || "",
+          teams: [...filteredTeams],
+          facilities: [...filteredFacilities],
+          school: filteredSchool.find(() => true),
         },
       },
     }).then((res) => {
@@ -97,9 +108,8 @@ const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
         <ToastBody text="Profile has been updated successfully!" />
       ));
       dispatch(userActions.setData(res.data.update_profile.profile));
-      setFormShow();
+      setFormShow(false);
     });
-    setIsUpdating(false);
   };
 
   const handleUpload = async () => {
@@ -116,6 +126,7 @@ const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
   const handleCancel = async () => {
     setFile(undefined);
     setUrl("");
+    setPreview("");
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target as HTMLInputElement;
@@ -124,6 +135,11 @@ const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
     }
     const file = input.files[0];
     setFile(file);
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      setPreview(reader.result);
+    };
   };
   if (!userData) {
     return (
@@ -134,20 +150,20 @@ const SidebarFormContainer: React.FC<SidebarFormProps> = ({ setFormShow }) => {
   }
   return (
     <SidebarForm
-      setFormShow={setFormShow}
       handleSubmit={handleSubmit}
       userData={userData}
-      url={url}
+      preview={preview}
       data={data.current_profile}
       file={file}
       isImageUpload={isImageUpload}
       handleUpload={handleUpload}
       handleChange={handleChange}
       handleCancel={handleCancel}
+      setFormShow={setFormShow}
       positionOptions={positionOptions}
       handsOptions={handsOptions}
       schoolOptions={schoolOptions}
-      isUpdating={isUpdating}
+      isUpdating={updateLoading}
       schoolYearsOptions={schoolYearsOptions}
       teamsOptions={teamsOptions}
       facilitiesOptions={facilitiesOptions}

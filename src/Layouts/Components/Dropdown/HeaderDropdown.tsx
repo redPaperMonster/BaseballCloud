@@ -5,14 +5,12 @@ import { fetchAPI } from "../../../APIService";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../../Store";
 import {
-  DropdownContainer,
-  DropdownPanel,
   DropdownLink,
   DropdownItem,
   DropdownButton,
   IconWrapper,
-} from "./DropdownStyle";
-import useComponentOpened from "./useComponentOpened";
+} from "./HeaderDropdownStyle";
+import { Dropdown, useComponentOpened } from "../../../Components";
 
 export interface DropdownStyleProps {
   isOpened: boolean;
@@ -21,7 +19,7 @@ interface DropdownProps {
   userName: string;
 }
 
-const DropdownMenu: React.FC<DropdownProps> = ({ userName }) => {
+const HeaderDropdown: React.FC<DropdownProps> = ({ userName }) => {
   const dispatch = useDispatch();
   const { ref, isOpened, setIsOpened } = useComponentOpened(false);
 
@@ -32,14 +30,14 @@ const DropdownMenu: React.FC<DropdownProps> = ({ userName }) => {
     });
   };
   return (
-    <DropdownContainer ref={ref}>
+    <div ref={ref}>
       <DropdownButton onClick={() => setIsOpened(!isOpened)}>
         {userName}
         <IconWrapper>
           <ArrowIcon />
         </IconWrapper>
       </DropdownButton>
-      <DropdownPanel isOpened={isOpened}>
+      <Dropdown isOpened={isOpened}>
         <DropdownLink
           to={UserPaths.profile}
           onClick={() => setIsOpened(!isOpened)}
@@ -47,9 +45,9 @@ const DropdownMenu: React.FC<DropdownProps> = ({ userName }) => {
           My Profile
         </DropdownLink>
         <DropdownItem onClick={handleLogOut}>Log Out</DropdownItem>
-      </DropdownPanel>
-    </DropdownContainer>
+      </Dropdown>
+    </div>
   );
 };
 
-export default DropdownMenu;
+export default HeaderDropdown;

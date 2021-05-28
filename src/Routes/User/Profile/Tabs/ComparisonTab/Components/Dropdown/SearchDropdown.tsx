@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React from "react";
 import Loader from "react-loader-spinner";
+import { Dropdown } from "../../../../../../../Components";
 import { PlayerDataType } from "../../../../../../../Store";
 import { queries } from "../../../../Schemas";
 import SearchDropdownItem from "../DropdownItem/SearchDropdownItem";
@@ -23,6 +24,7 @@ const SearchDropdown: React.FC<DropdownProps> = ({
   setCurrentPlayer,
   setIsOpened,
   setPlayerName,
+  isOpened,
 }) => {
   const { loading, data } = useQuery(queries.getPlayersNames, {
     variables: {
@@ -42,7 +44,6 @@ const SearchDropdown: React.FC<DropdownProps> = ({
           />
         )
       );
-
       return dropdownList;
     }
   };
@@ -54,11 +55,7 @@ const SearchDropdown: React.FC<DropdownProps> = ({
     data.profile_names &&
     data.profile_names.profile_names.find(() => true)
   ) {
-    return (
-      <DropdownContainer>
-        <DropdownPanel>{renderDropdown()}</DropdownPanel>
-      </DropdownContainer>
-    );
+    return <Dropdown isOpened={isOpened}>{renderDropdown()}</Dropdown>;
   }
   return null;
 };

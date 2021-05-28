@@ -27,19 +27,21 @@ import {
   UploadImageInput,
   UserImage,
 } from "./SidebarFormStyle";
-import Loader from "react-loader-spinner";
 import image from "../../../../../Assets/img/UserAvatar.png";
-import { UserDataType } from "../../../../../Store";
+import { UserDataType, userSelector } from "../../../../../Store";
+import { SubmitButtonType } from "../../../../../Components/Button/SubmitButton/SubmitButton";
+import { useSelector } from "react-redux";
+import { hasEmptyValues } from "../Utils/hasEmptyValues";
+import { setDataToOptions } from "../Utils/setDefaultOptions";
 
 export interface SidebarFormStyleProps {
   url: string;
 }
 
 interface SidebarFormProps {
-  setFormShow: () => void;
+  setFormShow: React.Dispatch<React.SetStateAction<boolean>>;
   handleSubmit: (values: UserDataType) => Promise<void>;
   userData: UserDataType;
-  url: string | undefined;
   data: UserDataType;
   file: File | undefined;
   isImageUpload: boolean;
@@ -53,13 +55,13 @@ interface SidebarFormProps {
   schoolYearsOptions: SelectOptionType[];
   teamsOptions: SelectOptionType;
   facilitiesOptions: SelectOptionType;
+  preview: string | ArrayBuffer | null | undefined;
 }
 
 const SidebarForm: React.FC<SidebarFormProps> = ({
   setFormShow,
   handleSubmit,
   userData,
-  url,
   data,
   file,
   isImageUpload,
@@ -73,23 +75,24 @@ const SidebarForm: React.FC<SidebarFormProps> = ({
   schoolYearsOptions,
   teamsOptions,
   facilitiesOptions,
+  preview,
 }) => {
+  const requiredUserData = useSelector(userSelector.getUserRequiredData());
   return (
     <div>
       <Form
         onSubmit={handleSubmit}
-        initialValues={{
-          ...userData,
-          school: userData.school,
-          teams: userData.teams,
-          facilities: userData.facilities,
-        }}
+        initialValues={
+          !hasEmptyValues(requiredUserData) && {
+            ...setDataToOptions(userData),
+          }
+        }
         validate={(values) => validation.sidebarFormValidation(values)}
       >
         {({ handleSubmit }) => (
           <div>
             <ImageWrapper>
-              <UserImage url={url || data.avatar || image} />
+              <UserImage url={preview?.toString() || data.avatar || image} />
               <ChoosePhotoLabelWrapper>
                 <Field<FileList> name="avatar">
                   {({}) => (
@@ -126,19 +129,19 @@ const SidebarForm: React.FC<SidebarFormProps> = ({
             </ImageWrapper>
             <NameFormsWrapper>
               <Field name="first_name" validate={validation.required}>
-                {(props) => <FormInput placeholder="First name" {...props} />}
+                {(props) => <FormInput placeholder="First name*" {...props} />}
               </Field>
               <Field name="last_name" validate={validation.required}>
-                {(props) => <FormInput placeholder="Last name" {...props} />}
+                {(props) => <FormInput placeholder="Last name*" {...props} />}
               </Field>
             </NameFormsWrapper>
 
             <FormsSelectWrapper>
-              <Field name="position">
+              <Field name="position" validate={validation.required}>
                 {(props) => (
                   <FormSelect
                     options={positionOptions}
-                    placeholder="Position"
+                    placeholder="Position*"
                     {...props}
                   />
                 )}
@@ -166,7 +169,7 @@ const SidebarForm: React.FC<SidebarFormProps> = ({
             <HeightWrapper>
               <Field name="feet" validate={validation.heightValidation}>
                 {(props) => (
-                  <FormInput placeholder="Feet" {...props} type="number" />
+                  <FormInput placeholder="Feet*" {...props} type="number" />
                 )}
               </Field>
               <Field name="inches">
@@ -177,27 +180,27 @@ const SidebarForm: React.FC<SidebarFormProps> = ({
             </HeightWrapper>
             <Field name="weight" validate={validation.weightValidation}>
               {(props) => (
-                <FormInput placeholder="Weight" {...props} type="number" />
+                <FormInput placeholder="Weight*" {...props} type="number" />
               )}
             </Field>
             <HandSelectContainer>
               <HandSelectWrapper>
-                <Field name="throws_hand">
+                <Field name="throws_hand" validate={validation.required}>
                   {(props) => (
                     <FormSelect
                       options={handsOptions}
-                      placeholder="Throws"
+                      placeholder="Throws*"
                       {...props}
                     />
                   )}
                 </Field>
               </HandSelectWrapper>
               <HandSelectWrapper>
-                <Field name="bats_hand">
+                <Field name="bats_hand" validate={validation.required}>
                   {(props) => (
                     <FormSelect
                       options={handsOptions}
-                      placeholder="Bats"
+                      placeholder="Bats*"
                       {...props}
                     />
                   )}
@@ -277,21 +280,16 @@ const SidebarForm: React.FC<SidebarFormProps> = ({
             <FormButtonContainer>
               <FormButtonWrapper>
                 <SubmitButton
-                  onClick={setFormShow}
+                  onClick={() => setFormShow(false)}
                   title="Cancel"
-                  isCancelType
+                  type={SubmitButtonType.cancel}
                 />
               </FormButtonWrapper>
-              <SubmitButton onClick={handleSubmit} title="Submit">
-                {isUpdating && (
-                  <Loader
-                    type="ThreeDots"
-                    color="#fff"
-                    height={10}
-                    width={20}
-                  />
-                )}
-              </SubmitButton>
+              <SubmitButton
+                onClick={handleSubmit}
+                title="Submit"
+                loading={isUpdating}
+              ></SubmitButton>
             </FormButtonContainer>
           </div>
         )}

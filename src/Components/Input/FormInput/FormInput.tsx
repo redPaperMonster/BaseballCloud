@@ -19,17 +19,13 @@ const FormInput: React.FC<FormInputProps> = ({
   input,
 }) => {
   const [focused, setFocused] = useState(false);
+
   return (
     <div>
       <InputWrapper>
         <Input
           {...input}
-          onChange={(e) =>
-            input.onChange(
-              type === "number" ? +e.currentTarget.value : e.currentTarget.value
-            )
-          }
-          value={type === "number" ? +input.value : input.value}
+          type={type}
           placeholder={placeholder}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}

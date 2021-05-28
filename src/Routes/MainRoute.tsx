@@ -3,7 +3,6 @@ import { Route, Switch } from "react-router-dom";
 import { AuthLayout, ProfileLayout, UserListLayout } from "../Layouts";
 import { ForgotPassword, Login, Registration } from "./Auth";
 import authGuard from "./Components/AuthGuard";
-import ProfileRouteWrapper from "./Components/ProfileRouteWrapper";
 import RouteWrapper from "./Components/RouteWrapper";
 import { AuthPaths, UserPaths } from "./routes";
 import { LeaderBoard, Network, UserProfile } from "./User";
@@ -17,7 +16,7 @@ function MainRoute() {
         Component={authGuard(Network)}
         Layout={UserListLayout}
       />
-      <ProfileRouteWrapper
+      <RouteWrapper
         exact
         path={UserPaths.profile}
         Component={authGuard(UserProfile)}

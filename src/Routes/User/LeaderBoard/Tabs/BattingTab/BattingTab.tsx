@@ -22,9 +22,12 @@ const BattingTab: React.FC<BattingTabProps> = ({}) => {
   const [currentFilter, setCurrentFilter] = useState(
     battingLeadTypeOptions.find(() => true)?.value
   );
-  const { loading, error, data } = useQuery(queries.getLeaderBoardBatting, {
-    variables: { input: { type: currentFilter } },
-  });
+  const { loading, error, data, refetch } = useQuery(
+    queries.getLeaderBoardBatting,
+    {
+      variables: { input: { type: currentFilter } },
+    }
+  );
   if (loading)
     return (
       <LoaderWrapper>
@@ -48,7 +51,14 @@ const BattingTab: React.FC<BattingTabProps> = ({}) => {
       <TableHeader />
       {data.leaderboard_batting.leaderboard_batting.map(
         (item: BatterDataType, index: number) => {
-          return <TableRow playerData={item} rank={++index} key={index} />;
+          return (
+            <TableRow
+              playerData={item}
+              rank={++index}
+              key={index}
+              refetch={refetch}
+            />
+          );
         }
       )}
     </TabContainer>

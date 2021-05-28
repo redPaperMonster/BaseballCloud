@@ -16,7 +16,6 @@ import { userSelector } from "../../../Store";
 import { useLocation } from "react-router-dom";
 import image from "../../../Assets/img/UserAvatar.png";
 interface HeaderProps {
-  isAuthorized?: boolean;
   avatarUrl?: string;
 }
 export type HeaderImageStyleProps = {
@@ -25,15 +24,15 @@ export type HeaderImageStyleProps = {
 export type HeaderLinkStyleProps = {
   active: string;
 };
-const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
+const Header: React.FC<HeaderProps> = ({}) => {
   const userData = useSelector(userSelector.getUserData());
   const { pathname } = useLocation();
   return (
     <HeaderContainer>
-      <Link to={isAuthorized ? UserPaths.profile : AuthPaths.login}>
+      <Link to={userData.token ? UserPaths.profile : AuthPaths.login}>
         <LogoIcon />
       </Link>
-      {isAuthorized && (
+      {userData.token && (
         <NavContainer>
           <NavWrapper>
             <NavigationLink

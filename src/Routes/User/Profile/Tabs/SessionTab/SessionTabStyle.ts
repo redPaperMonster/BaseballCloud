@@ -148,7 +148,7 @@ export const DatePickerWrapperStyles = createGlobalStyle`
   z-index: 2;
 }
 .react-datepicker-popper .react-datepicker__day--selected {
-  background-color: #48bbff !important;
+  background-color: ${colors.lightBlue} !important;
   color: #fff;
 }
 `;

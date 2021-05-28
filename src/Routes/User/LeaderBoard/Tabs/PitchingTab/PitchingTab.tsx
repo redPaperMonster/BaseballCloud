@@ -25,9 +25,12 @@ const PitchingTab: React.FC<PitchingTabProps> = ({}) => {
   const [currentFilter, setCurrentFilter] = useState(
     pitchingLeadTypeOptions[0].value
   );
-  const { loading, error, data } = useQuery(queries.getLeaderboardPitching, {
-    variables: { input: { type: currentFilter } },
-  });
+  const { loading, error, data, refetch } = useQuery(
+    queries.getLeaderboardPitching,
+    {
+      variables: { input: { type: currentFilter } },
+    }
+  );
   if (loading)
     return (
       <LoaderWrapper>
@@ -53,7 +56,14 @@ const PitchingTab: React.FC<PitchingTabProps> = ({}) => {
       <TableHeader />
       {data.leaderboard_pitching.leaderboard_pitching.map(
         (item: PitchingDataType, index: number) => {
-          return <TableRow playerData={item} rank={++index} key={index} />;
+          return (
+            <TableRow
+              playerData={item}
+              rank={++index}
+              key={index}
+              refetch={refetch}
+            />
+          );
         }
       )}
     </TabContainer>

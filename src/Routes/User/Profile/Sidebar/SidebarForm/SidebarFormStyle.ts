@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../../../../Utils";
-import { SidebarFormStyleProps } from "./SidebarFormContainer";
+import { SidebarFormStyleProps } from "./SidebarForm";
 
 export const ImageWrapper = styled.div`
   display: flex;
@@ -154,6 +154,7 @@ export const UploadButton = styled.a`
 export const UploadCancelButton = styled.a`
   color: ${colors.darkGray};
   margin-left: 8px;
+  cursor: pointer;
 `;
 export const FileNameLabel = styled.label`
   margin-bottom: 0;

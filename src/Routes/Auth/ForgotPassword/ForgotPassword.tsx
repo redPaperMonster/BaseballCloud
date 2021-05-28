@@ -6,7 +6,7 @@ import {
   SubTitle,
   FormFooter,
   SignUpLink,
-} from "./ForgotPassStyle";
+} from "./ForgotPasswordStyle";
 import { Form, Field } from "react-final-form";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import fetchAPI from "../../../APIService/fetchService";

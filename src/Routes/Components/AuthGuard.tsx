@@ -5,7 +5,7 @@ import { userSelector } from "../../Store";
 import { AuthPaths, UserPaths } from "../routes";
 
 function authGuard<T extends RouteComponentProps = RouteComponentProps>(
-  Component?: React.FC<any>
+  Component?: React.FC
 ): React.ComponentType<T> {
   const WrappedComponent: React.FC<T> = (props: T) => {
     const token = useSelector(userSelector.getToken());
