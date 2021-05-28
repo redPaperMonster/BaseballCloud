@@ -4,4 +4,13 @@ export { default as ProgressBar } from "./ProgressBar/ProgressBar";
 export { default as FilterInput } from "./Input/FilterInput/FilterInput";
 export { default as TabButton } from "./Button/TabButton/TabButton";
 export { default as FormInput } from "./Input/FormInput/FormInput";
-export { default as FormSelect } from "./Select/FormSelect";
+export { default as FormSelect } from "./Select/FormSelect/FormSelect";
+export { default as FilterSelect } from "./Select/FilterSelect/FilterSelect";
+export { default as FavoriteButton } from "./Button/FavoriteButton/FavoriteButton";
+export { default as useComponentOpened } from "./Dropdown/useComponentOpened";
+export { default as Dropdown } from "./Dropdown/Dropdown";
+
+export { default as SearchInput } from "./Input/SearchInput/SearchInput";
+export { StyledToast } from "./Toast/ToastStyle";
+export { default as ToastBody } from "./Toast/ToastBody";
+export { LoaderWrapper } from "./Loader/LoaderWrapper";

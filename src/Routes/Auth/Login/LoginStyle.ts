@@ -42,3 +42,12 @@ export const FormFooter = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const ErrorText = styled.div`
+  display: flex;
+  color: ${colors.red};
+`;
+export const ErrorWrapper = styled.div`
+  margin-top: 8px;
+  margin-bottom: 4px;
+`;

@@ -1,28 +1,54 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { userSelector } from "../Store";
-import { AuthRoute, UserRoute } from "./";
+import { Route, Switch } from "react-router-dom";
+import { AuthLayout, ProfileLayout, UserListLayout } from "../Layouts";
+import { ForgotPassword, Login, Registration } from "./Auth";
+import authGuard from "./Components/AuthGuard";
+import RouteWrapper from "./Components/RouteWrapper";
 import { AuthPaths, UserPaths } from "./routes";
+import { LeaderBoard, Network, UserProfile } from "./User";
 
 function MainRoute() {
-  const token = useSelector(userSelector.getToken());
-
   return (
-    <div>
-      <Route
-        path="/"
-        render={(props) => {
-          return token ? (
-            <Redirect to={UserPaths.profile} />
-          ) : (
-            <Redirect to={AuthPaths.login} />
-          );
-        }}
+    <Switch>
+      <Route exact path={AuthPaths.home} component={authGuard()} />
+      <RouteWrapper
+        path={UserPaths.network}
+        Component={authGuard(Network)}
+        Layout={UserListLayout}
       />
-      <Route path={AuthPaths.login} component={AuthRoute} />
-      <Route path={UserPaths.profile} component={UserRoute} />
-    </div>
+      <RouteWrapper
+        exact
+        path={UserPaths.profile}
+        Component={authGuard(UserProfile)}
+        Layout={ProfileLayout}
+      />
+
+      <RouteWrapper
+        path={UserPaths.leaderBoard}
+        Component={authGuard(LeaderBoard)}
+        Layout={UserListLayout}
+      />
+      <RouteWrapper
+        path={UserPaths.playerProfile}
+        Component={authGuard(UserProfile)}
+        Layout={ProfileLayout}
+      />
+      <RouteWrapper
+        path={AuthPaths.login}
+        Component={authGuard(Login)}
+        Layout={AuthLayout}
+      />
+      <RouteWrapper
+        path={AuthPaths.forgotPassword}
+        Component={authGuard(ForgotPassword)}
+        Layout={AuthLayout}
+      />
+      <RouteWrapper
+        path={AuthPaths.registration}
+        Component={authGuard(Registration)}
+        Layout={AuthLayout}
+      />
+    </Switch>
   );
 }
 export default MainRoute;

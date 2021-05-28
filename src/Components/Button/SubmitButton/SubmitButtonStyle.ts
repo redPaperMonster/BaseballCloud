@@ -18,7 +18,6 @@ export const Button = styled.button<SubmitButtonStyleProps>`
   display: block;
   border-radius: 4px;
   &:hover {
-    box-shadow: 0px 0px 4px red;
     box-shadow: 0 0 4px 0 ${colors.lightBlue};
     ${(props) => (props.isCancelType ? "color:" + colors.lightBlue : "")}
   }

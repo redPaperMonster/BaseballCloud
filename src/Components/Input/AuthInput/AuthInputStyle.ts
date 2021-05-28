@@ -5,6 +5,10 @@ export const InputContainer = styled.div`
   display: flex;
   position: relative;
   margin-bottom: 15px;
+  display: flex;
+  width: 100%;
+  flex: 0 0 100%;
+  flex-direction: column;
 `;
 
 export const Input = styled.input`
@@ -28,8 +32,6 @@ export const Input = styled.input`
 
 export const InputWrapper = styled.div`
   display: flex;
-  width: 100%;
-  flex: 0 0 100%;
 `;
 
 export const IconWrapper = styled.div`
@@ -39,6 +41,13 @@ export const IconWrapper = styled.div`
   left: 17px;
   bottom: 0;
   align-items: start;
-  color: #667784;
+  color: ${colors.darkGray};
   margin-right: 20px;
+`;
+
+export const ErrorText = styled.div`
+  display: flex;
+  color: ${colors.red};
+  margin-top: 8px;
+  margin-bottom: 4px;
 `;

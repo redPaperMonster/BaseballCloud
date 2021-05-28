@@ -5,7 +5,7 @@ import { AuthPaths, UserPaths } from "../../../Routes/routes";
 import {
   HeaderContainer,
   NavContainer,
-  NavLink,
+  NavigationLink,
   NavMenu,
   NavWrapper,
   UserImage,
@@ -14,8 +14,8 @@ import { DropdownMenu } from "..";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../../Store";
 import { useLocation } from "react-router-dom";
+import image from "../../../Assets/img/UserAvatar.png";
 interface HeaderProps {
-  isAuthorized?: boolean;
   avatarUrl?: string;
 }
 export type HeaderImageStyleProps = {
@@ -24,37 +24,38 @@ export type HeaderImageStyleProps = {
 export type HeaderLinkStyleProps = {
   active: string;
 };
-const Header: React.FC<HeaderProps> = ({ isAuthorized = false }) => {
+const Header: React.FC<HeaderProps> = ({}) => {
   const userData = useSelector(userSelector.getUserData());
   const { pathname } = useLocation();
-
   return (
     <HeaderContainer>
-      <Link to={isAuthorized ? UserPaths.profile : AuthPaths.login}>
+      <Link to={userData.token ? UserPaths.profile : AuthPaths.login}>
         <LogoIcon />
       </Link>
-      {isAuthorized && (
+      {userData.token && (
         <NavContainer>
           <NavWrapper>
-            <NavLink
+            <NavigationLink
               to={UserPaths.leaderBoard}
               active={(pathname === UserPaths.leaderBoard).toString()}
             >
               Leaderboard
-            </NavLink>
-            <NavLink
+            </NavigationLink>
+            <NavigationLink
               to={UserPaths.network}
               active={(pathname === UserPaths.network).toString()}
             >
               Network
-            </NavLink>
+            </NavigationLink>
           </NavWrapper>
           <NavMenu>
             <Link to={UserPaths.profile}>
-              <UserImage url={userData.avatarURL} />
+              <UserImage url={userData.avatar || image} />
             </Link>
             <DropdownMenu
-              userName={`${userData.firstName} ${userData.lastName}`}
+              userName={`${userData.first_name || "Profile"} ${
+                userData.last_name || "Name"
+              }`}
             />
           </NavMenu>
         </NavContainer>

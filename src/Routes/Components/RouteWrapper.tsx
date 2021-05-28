@@ -1,27 +1,29 @@
-import React from "react";
+import { ComponentType } from "react";
 import { Route } from "react-router-dom";
 
-interface RouteWrapperProps {
-  Component: React.FC<any>;
-  Layout: React.FC<any>;
+export interface RouteWrapperProps {
+  Layout: React.FC;
+  Component: ComponentType<any>;
   path: string;
-  Sidebar?: React.FC<any>;
+  exact?: boolean;
 }
 const RouteWrapper: React.FC<RouteWrapperProps> = ({
-  Component,
   Layout,
-  path,
-  Sidebar,
+  Component,
+  ...rest
 }) => {
   return (
     <Route
-      path={path}
-      render={(props) => (
-        <Layout Sidebar={Sidebar}>
-          <Component />
-        </Layout>
-      )}
+      {...rest}
+      render={({ ...props }) => {
+        return (
+          <Layout {...props}>
+            <Component {...props} />
+          </Layout>
+        );
+      }}
     />
   );
 };
+
 export default RouteWrapper;

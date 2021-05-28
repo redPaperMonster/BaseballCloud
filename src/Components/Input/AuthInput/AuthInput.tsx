@@ -6,6 +6,7 @@ import {
   IconWrapper,
   Input,
   InputContainer,
+  ErrorText,
 } from "./AuthInputStyle";
 import { FieldRenderProps } from "react-final-form";
 interface AuthInputProps extends FieldRenderProps<string> {
@@ -23,17 +24,15 @@ const AuthInput: React.FC<AuthInputProps> = ({
 }) => {
   return (
     <InputContainer>
-      <IconWrapper>
-        <FontAwesomeIcon icon={icon} color="gray" />
-      </IconWrapper>
       <InputWrapper>
-        <Input
-          placeholder={placeholder}
-          onChange={input.onChange}
-          value={input.value}
-          type={type}
-        />
+        <IconWrapper>
+          <FontAwesomeIcon icon={icon} color="gray" />
+        </IconWrapper>
+        <Input placeholder={placeholder} type={type} {...input} />
       </InputWrapper>
+      {meta.touched && (meta.error || meta.submitError) && (
+        <ErrorText>{meta.error || meta.submitError}</ErrorText>
+      )}
     </InputContainer>
   );
 };
